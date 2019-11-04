@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.0.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '7.4.2',
+    exturl: false,
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false},
+    copycode: {"enable":false,"show_result":false,"style":null},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: '',
+    motion: {"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    translation: {
+      copy_button: 'Copy',
+      copy_success: 'Copied',
+      copy_failure: 'Copy failed'
+    },
+    sidebarPadding: 40
+  };
+</script>
+
+  <meta name="description" content="前几天我们几个人被指定讲了支持向量机（Support Vector Machine），讲完以后我觉得材料就这么躺在电脑里有点可惜，所以整理好了发在这里存档。我主要负责的是软间隔与核技巧，所以这两块的内容会写的多一点。支持向量回归我完全没看，可能后面看过以后会专门开一篇文章整理一下吧。（希望自己不会忘记）">
+<meta name="keywords" content="机器学习,支持向量机">
+<meta property="og:type" content="article">
+<meta property="og:title" content="支持向量机">
+<meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2019&#x2F;11&#x2F;04&#x2F;%E6%94%AF%E6%8C%81%E5%90%91%E9%87%8F%E6%9C%BA&#x2F;index.html">
+<meta property="og:site_name" content="Plus of Oval">
+<meta property="og:description" content="前几天我们几个人被指定讲了支持向量机（Support Vector Machine），讲完以后我觉得材料就这么躺在电脑里有点可惜，所以整理好了发在这里存档。我主要负责的是软间隔与核技巧，所以这两块的内容会写的多一点。支持向量回归我完全没看，可能后面看过以后会专门开一篇文章整理一下吧。（希望自己不会忘记）">
+<meta property="og:locale" content="en">
+<meta property="og:image" content="http:&#x2F;&#x2F;chart.googleapis.com&#x2F;chart?cht=tx&amp;chl= L(w,b)=-\sum_{x_i\in M} y_i(w \cdot {x_i + b})">
+<meta property="og:image" content="http:&#x2F;&#x2F;&#x2F;&#x2F;wx3.sinaimg.cn&#x2F;mw690&#x2F;a9950722gy1g8mi00twd9j20o90fwmy5.jpg">
+<meta property="og:image" content="http:&#x2F;&#x2F;&#x2F;&#x2F;wx2.sinaimg.cn&#x2F;mw690&#x2F;a9950722gy1g8mi013sf0j20dh08k0tm.jpg">
+<meta property="og:image" content="http:&#x2F;&#x2F;&#x2F;&#x2F;wx2.sinaimg.cn&#x2F;mw690&#x2F;a9950722gy1g8mi00lpgzj20fy0d0jrc.jpg">
+<meta property="og:updated_time" content="2019-11-04T18:17:09.103Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http:&#x2F;&#x2F;chart.googleapis.com&#x2F;chart?cht=tx&amp;chl= L(w,b)=-\sum_{x_i\in M} y_i(w \cdot {x_i + b})">
+
+<link rel="canonical" href="http://yoursite.com/2019/11/04/%E6%94%AF%E6%8C%81%E5%90%91%E9%87%8F%E6%9C%BA/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true,
+    isPage: false,
+    isArchive: false
+  };
+</script>
+
+  <title>支持向量机 | Plus of Oval</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Plus of Oval</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+  </div>
+
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>Tags</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>Categories</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>Archives</a>
+
+  </li>
+  </ul>
+
+</nav>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="en">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/11/04/%E6%94%AF%E6%8C%81%E5%90%91%E9%87%8F%E6%9C%BA/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://avatar.saraba1st.com/images/noavatar_small.gif">
+      <meta itemprop="name" content="Oval_plus">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Plus of Oval">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          支持向量机
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2019-11-04 11:20:18" itemprop="dateCreated datePublished" datetime="2019-11-04T11:20:18+08:00">2019-11-04</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2019-11-05 02:17:09" itemprop="dateModified" datetime="2019-11-05T02:17:09+08:00">2019-11-05</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index">
+                    <span itemprop="name">学习</span>
+                  </a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="Views" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">Views: </span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>前几天我们几个人被指定讲了支持向量机（Support Vector Machine），讲完以后我觉得材料就这么躺在电脑里有点可惜，所以整理好了发在这里存档。我主要负责的是软间隔与核技巧，所以这两块的内容会写的多一点。支持向量回归我完全没看，可能后面看过以后会专门开一篇文章整理一下吧。（希望自己不会忘记）</p>
+<a id="more"></a>
+
+<h2 id="感知机"><a href="#感知机" class="headerlink" title="感知机"></a>感知机</h2><p> <del>一上来就是感知机好像哪里不太对，按理说感知机应该和神经网络放在一起。不过感知机也是支持向量机的基础，所以放在这里也算合适。</del><br>所谓感知机，它的目标是求出<strong>将训练数据进行线性划分的分离超平面</strong>。<br>第一点要注意的是，感知机作为一个分类手段，只能用在数据集是<strong>线性可分</strong>的情况下。换句话说，如果数据集是非线性可分的，那么感知机这种分类手段就毫无作用了。线性可分的定义在二维空间中还比较容易理解，放在高维空间中就要用到<a href="https://zh.wikipedia.org/wiki/%E5%87%B8%E5%8C%85" target="_blank" rel="noopener">凸包</a>的定义。在高维空间中，样本点集的线性可分的等价定义是</p>
+<blockquote>
+<p>正负样本点集的凸包彼此不交  </p>
+</blockquote>
+<p>第二点则是关于超平面。超平面的公式长这个样子：</p>
+<blockquote>
+<p>w’x+b=0  </p>
+</blockquote>
+<p>其中w是超平面的法向量，b是法向量。既然超平面是用来分类的，那么对于第i个样本点来说，它肯定在超平面的某侧。也就是说，wx_i+b要么＞0，要么＜0。 </p>
+<p>接下来讲讲感知机的损失函数。它长这个样子：<br><img src="http://chart.googleapis.com/chart?cht=tx&chl= L(w,b)=-\sum_{x_i\in M} y_i(w \cdot {x_i + b})" style="border:none;">  y是分类情况，一共两种，+1和-1，分别代表正例和反例。 <del>因为打公式太麻烦了，还得用img命令，所以就不打了。</del> i是表示第i个样本点，x是表示样本点。为啥损失函数是负的呢？因为wx+b这个部分的值表示的是样本点被划为正例还是反例，如果样本点被超平面划为了正例，而它实际的分类结果应该是反例，那么y(wx+b)的结果就应该是负的。换句话说，对于误分类的数据，y(wx+b)的值就应该非正。所以把所有误分类数据加一块儿，再加个负号，就表示这个学习器到底有多差，也就是所谓的损失函数。<br>实际上这玩意儿应该是在乘上w的模的倒数，用来表示误分类点到超平面的距离的和，但是考虑模的倒数在实际衡量与运算时没什么必要性，所以就没加了。  </p>
+<p>实际上感知机部分已经讲完了……因为感知机这东西从本质上来说就是最小化损失函数。至于怎么最小化损失函数，那这就是最优化问题要去处理的了（太欠揍了<br>感知机算法求最值的方法，一般论是用随机梯度下降法。为什么是用梯度下降法呢，因为它方便。为什么是用随机梯度下降法（SGD）呢？因为感知机是只要完成任务就完事儿的一种算法。也就是说，感知机只需要找到一个超平面，能够分开所有的正反样本点，那么它就不会接着寻找其他更妙的超平面了。<br>随机梯度下降法就是，随机挑个误分类点，梯度下降找到这个点应该被正确分类的状况，降低损失函数。回头接着找下一个误分类点，直到没有误分类点为止。  随机梯度下降法比普通的梯度下降法优势在于，随机性决定它最坏的情况也就是遍历所有点，但是总归能把样本点分干净，好的情况下就可以缩短分类过程，做起来比较快。这里值得注意的是，可以看出，根据最初选择的点的不同，感知机算出的超平面是不一样的。<br>接下来就是如何真的求解损失函数最小值了。从公式能看出来，如果要求最小值就得搞定两个参数，这很烦。还好，有个玩意儿叫拉格朗日对偶性，能够在求最值时从两个参数降低到求一个参数。因为后面支持向量机里也会讲到如何运用拉格朗日对偶性减少要求的参数个数，所以就不在这里讲了。  </p>
+<p>那么感知机就算是讲完了，接下来讲支持向量机。</p>
+<h1 id="支持向量机"><a href="#支持向量机" class="headerlink" title="支持向量机"></a>支持向量机</h1><hr>
+<p>首先第一个问题是，啥是支持向量机(Support Vector Machine)。<br>为了解答这个问题，得说说支持向量机和感知机的相同与差别。相同点就是，这俩都是二分类模型，都是插个超平面把样本点分开。本质上的不同则是，感知机是分完就完事儿了，而且它只能搞定样本点线性相关的情况。支持向量机，它搞出的超平面，是<strong>唯一</strong>的。因为它分样本点时，是以正负样本点与超平面之间的某种间隔最大为标准去分的。这个间隔，叫做几何间隔，定义后面再谈。确定与超平面间隔最大的那几个向量，就被叫做<font size=20 face = "微软雅黑"><strong>支 持 向 量</strong></font>。换句话说，这个学习器就是用这几个向量支持来进行分类的。支持向量机强就强在，它不仅能分类线性可分的，还能分线性不可分的情况。根据情况不同，SVM有不同的解决方法，硬间隔是针对线性可分的，软间隔（松弛变量+惩罚因子）是针对近似线性可分的，核技巧是去搞非线性可分的。</p>
+<p>在开始讲之前还是先重申一下定义。</p>
+<blockquote>
+<p>支持向量机的基本模型是，定义在特征空间上的间隔最大的线性分类器。  </p>
+</blockquote>
+<p>搞张图看看：<img src="http:////wx3.sinaimg.cn/mw690/a9950722gy1g8mi00twd9j20o90fwmy5.jpg" alt="搞张图">在虚线上的点就是支持向量了，蓝色的就是超平面。超平面离支持向量还是很远的，分的很清楚。可以说是很漂亮的线性可分与超平面的图。同学做的，我偷拿过来用的。  </p>
+<p>好，那么还是讲讲间隔问题。本来这里已经详细地讲完了函数间隔和几何间隔。但是编辑器闪退了，东西全没了了，没兴致再搞了。就说一下，几何间隔是相对地表示了样本点到超平面的距离，而函数间隔是绝对地表示了样本点到超平面的距离。区别在于，几何间隔除以了超平面法向量的模，而函数间隔没有。如果不能理解原因的话，参考<a href="https://baike.baidu.com/item/%E7%82%B9%E5%88%B0%E5%B9%B3%E9%9D%A2%E8%B7%9D%E7%A6%BB/10690055" target="_blank" rel="noopener">这里</a>。由于支持向量机要求最大化分隔面，所以它必须是用相对距离而不是绝对距离，否则会遇到当样本点等比例变化时，超平面也跟着动来动去的情况。</p>
+<h2 id="线性可分"><a href="#线性可分" class="headerlink" title="线性可分"></a>线性可分</h2><p>线性可分是用硬间隔，公式就不放了，因为闪退的缘故全都没了。这里要注意的是1/2||w||^2为什么是这样。我自己理解的是，1、方便求导。2、w’w作为矩阵有很多优良的性质，比如说对称幂等。3、这东西非负。  </p>
+<h2 id="线性不可分"><a href="#线性不可分" class="headerlink" title="线性不可分"></a>线性不可分</h2><p>线性不可分有两种情况，一种这个样子：<img src="http:////wx2.sinaimg.cn/mw690/a9950722gy1g8mi013sf0j20dh08k0tm.jpg" alt="近似线性不可分">叫它近似线性不可分。<br>还有一种是这个样子：<img src="http:////wx2.sinaimg.cn/mw690/a9950722gy1g8mi00lpgzj20fy0d0jrc.jpg" alt="非线性可分">叫它非线性可分。我自己随便画的，凑合看吧。<br>近似线性可分用松弛变量+惩罚因子的形式搞定。松弛变量的选取可以用0-1函数，hinge函数，指数函数等。一般用hinge函数，因为这东西可以让解具有稀疏性，而且能让函数性质变好（凸函数）还是个连续的东西。添加惩罚因子是因为，我们为了保证能覆盖所有的样本点而放弃了精度，那么就必须为精度付出相应的代价。惩罚因子就是这个代价。不是说所有的样本点都需要付出代价，只有那些误分类点才需要付出代价。或者可以理解成，普通的样本点的惩罚因子，是0。惩罚因子怎么挑呢？没办法挑，硬试试出来的，特别真实。<br>然后这里讲一下拉格朗日对偶性。看这个<a href="https://www.zhihu.com/question/58584814" target="_blank" rel="noopener">答案</a>，十分精妙。为什么非得用对偶性呢？一是简化计算，本来得算三个参数，现在只用算一个了。二是为了后面的核技巧做准备，对偶了以后就有内积形式了。<br>核技巧是这样的。这东西是个技巧，本质上来说，kernel和svm是正交关系，换句话说，关系不大。纯粹只是因为SVM这里需要用一个方法来解决从低维到高维的映射，然后kernel能做得到，所以才用到了核技巧。那为什么要完成低维到高维的映射呢？因为有个大牛证明了，低维空间中线性不可分的样本点，映射到了高维，就会变成近似可分。然后就可以用之前的方法去解决这个问题了。这里有个<a href="https://www.youtube.com/watch?v=3liCbRZPrZA" target="_blank" rel="noopener">视频</a>，需要翻墙，展示了用多项式kernel找超平面的手段。<br>核函数从某种意义上来说是逼近的思路，就跟泰勒展开那种是一样的。<br>什么样的函数能作核函数呢？有个大牛证明了，核函数对应的Gram矩阵是半正定矩阵，函数就能作核函数，就是<a href="https://en.wikipedia.org/wiki/Mercer%27s_theorem" target="_blank" rel="noopener">Mercer定理</a>。不过也是有几个通用的核函数的。至于核函数怎么挑选，两种方法：1、先验知识。比方说线性的就用线性核函数，复杂一点的可以套高斯核函数。2、试。<br>最后就是核技巧和松弛变量的关系。一般论，如果是非线性可分，先套个核函数，然后上松弛变量就可以了。  </p>
+<p>闪退真害人啊。</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/" rel="tag"># 机器学习</a>
+              <a href="/tags/%E6%94%AF%E6%8C%81%E5%90%91%E9%87%8F%E6%9C%BA/" rel="tag"># 支持向量机</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-next post-nav-item">
+                <a href="/2019/11/04/%E8%AF%9A%E5%93%A5%E4%B8%8B%E9%83%A8%E7%89%87%E4%BB%80%E4%B9%88%E6%97%B6%E5%80%99%E5%87%BA/" rel="next" title="诚哥下部片什么时候出">
+                  <i class="fa fa-chevron-left"></i> 诚哥下部片什么时候出
+                </a>
+            </div>
+
+            <span class="post-nav-divider"></span>
+
+            <div class="post-nav-prev post-nav-item">
+            </div>
+          </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+  </div>
+
+
+          </div>
+          
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#感知机"><span class="nav-number">1.</span> <span class="nav-text">感知机</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#支持向量机"><span class="nav-number"></span> <span class="nav-text">支持向量机</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#线性可分"><span class="nav-number">1.</span> <span class="nav-text">线性可分</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#线性不可分"><span class="nav-number">2.</span> <span class="nav-text">线性不可分</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <img class="site-author-image" itemprop="image" alt="Oval_plus"
+    src="https://avatar.saraba1st.com/images/noavatar_small.gif">
+  <p class="site-author-name" itemprop="name">Oval_plus</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">5</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">3</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">7</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Oval_plus</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a>
+  </div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">Theme – <a href="https://mist.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Mist</a>
+  </div>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="Total Visitors">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="Total Views">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+<script src="/js/utils.js"></script>
+<script src="/js/schemes/muse.js"></script>
+<script src="/js/next-boot.js"></script>
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+</body>
+</html>
