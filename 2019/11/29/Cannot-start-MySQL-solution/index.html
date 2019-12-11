@@ -50,14 +50,18 @@
   };
 </script>
 
-  <meta property="og:type" content="website">
-<meta property="og:title" content="Plus of Oval">
-<meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;tags&#x2F;%E6%94%AF%E6%8C%81%E5%90%91%E9%87%8F%E6%9C%BA&#x2F;index.html">
+  <meta name="description" content="After installing MySQL 8.0, some problems emerged, like MySql cannot be started in cmd.">
+<meta name="keywords" content="SQL">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Cannot start MySQL solution">
+<meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2019&#x2F;11&#x2F;29&#x2F;Cannot-start-MySQL-solution&#x2F;index.html">
 <meta property="og:site_name" content="Plus of Oval">
+<meta property="og:description" content="After installing MySQL 8.0, some problems emerged, like MySql cannot be started in cmd.">
 <meta property="og:locale" content="en">
+<meta property="og:updated_time" content="2019-12-11T16:29:18.719Z">
 <meta name="twitter:card" content="summary">
 
-<link rel="canonical" href="http://yoursite.com/tags/%E6%94%AF%E6%8C%81%E5%90%91%E9%87%8F%E6%9C%BA/">
+<link rel="canonical" href="http://yoursite.com/2019/11/29/Cannot-start-MySQL-solution/">
 
 
 <script id="page-configurations">
@@ -65,13 +69,13 @@
   CONFIG.page = {
     sidebar: "",
     isHome: false,
-    isPost: false,
+    isPost: true,
     isPage: false,
     isArchive: false
   };
 </script>
 
-  <title>Tag: 支持向量机 | Plus of Oval</title>
+  <title>Cannot start MySQL solution | Plus of Oval</title>
   
 
 
@@ -182,50 +186,124 @@
           <div class="content">
             
 
+  <div class="posts-expand">
+      
   
   
-  
-  <div class="post-block">
-    <div class="posts-collapse">
-      <div class="collection-title">
-        <h1 class="collection-header">支持向量机
-          <small>Tag</small>
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="en">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/11/29/Cannot-start-MySQL-solution/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://avatar.saraba1st.com/images/noavatar_small.gif">
+      <meta itemprop="name" content="Oval_plus">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Plus of Oval">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Cannot start MySQL solution
         </h1>
-      </div>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2019-11-29 10:06:24" itemprop="dateCreated datePublished" datetime="2019-11-29T10:06:24+08:00">2019-11-29</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2019-12-12 00:29:18" itemprop="dateModified" datetime="2019-12-12T00:29:18+08:00">2019-12-12</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index">
+                    <span itemprop="name">学习</span>
+                  </a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="Views" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">Views: </span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
 
       
-    <div class="collection-year">
-      <h1 class="collection-header">2019</h1>
+        <p>After installing MySQL 8.0, some problems emerged, like MySql cannot be started in cmd.  </p>
+<a id="more"></a>
+<ul>
+<li><p>First, check whether /bin is already added into the path.  If not, add the /mysql/mysql server/bin to the path.  </p>
+</li>
+<li><p>Second, check whether the path in cmd is correct.  It must  direct to the path of where mysql server is installed, such as /mysql/mysql server/bin.  </p>
+<ul>
+<li>If two steps above are done but that still not work, try to use <code>mysql -u root -p</code> to force start or <code>mysqld --console</code> to check the error message.  </li>
+</ul>
+</li>
+<li><p>Third, <code>mysqld --initialize</code> is required before input <code>net start mysql</code>.  If <code>net start mysql</code> does not work after initialization, delete the <strong>data</strong> folder in /mysql/mysql server folder, and initialize again. </p>
+</li>
+<li><p>If cmd reminds that ‘MySQL cannot start’ but it does not report any error, use <code>mysqld --console</code> to check the error.  If the problem is caused by the port is used, like 3306, use <code>netstat -ano|findstr 3306</code> to find the pid of process listening 3306 port, then kill it with <code>taskkill /f /pid *</code>, replacing * with the pid.  </p>
+<p>The problem would be solved.  <code>net start mysql</code> would work and enjoy coding.<br><strong>DO NOT FORGET TYPE SEMICOLON AT THE END OF CHANGING PASSWORD COMMAND</strong> <code>ALTER USER &#39;root&#39;@&#39;localhost&#39; IDENTIFIED WITH mysql_native_password BY &#39;Freeaxis@666&#39;;</code>, involving number,symbols capiltal and lower case letters  </p>
+</li>
+</ul>
+<p>2019/11/29</p>
+
     </div>
 
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
+    
+    
+    
 
-      <div class="post-meta">
-        <time itemprop="dateCreated"
-              datetime="2019-11-04T11:20:18+08:00"
-              content="2019-11-04">
-          11-04
-        </time>
-      </div>
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/SQL/" rel="tag"># SQL</a>
+          </div>
 
-      <h2 class="post-title">
-          <a class="post-title-link" href="/2019/11/04/%E6%94%AF%E6%8C%81%E5%90%91%E9%87%8F%E6%9C%BA/" itemprop="url">
-            <span itemprop="name">支持向量机</span>
-          </a>
-      </h2>
+        
 
-    </header>
+          <div class="post-nav">
+            <div class="post-nav-next post-nav-item">
+                <a href="/2019/11/28/2019-11-21%20test/" rel="next" title="2019/11/21 Mathematical Principle in Data Science Test">
+                  <i class="fa fa-chevron-left"></i> 2019/11/21 Mathematical Principle in Data Science Test
+                </a>
+            </div>
+
+            <span class="post-nav-divider"></span>
+
+            <div class="post-nav-prev post-nav-item">
+            </div>
+          </div>
+      </footer>
+    
   </article>
+  
+  
+  
 
-    </div>
   </div>
-  
-  
-  
-
-  
-
 
 
           </div>

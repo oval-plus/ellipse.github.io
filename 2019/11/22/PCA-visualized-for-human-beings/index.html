@@ -1,0 +1,650 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.0.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '7.4.2',
+    exturl: false,
+    sidebar: {"position":"left","display":"hide","offset":12,"onmobile":false},
+    copycode: {"enable":false,"show_result":false,"style":null},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: '',
+    motion: {"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    translation: {
+      copy_button: 'Copy',
+      copy_success: 'Copied',
+      copy_failure: 'Copy failed'
+    },
+    sidebarPadding: 40
+  };
+</script>
+
+  <meta name="description" content="MathJax.Hub.Config({ tex2jax: {inlineMath: [[&amp;apos;$&amp;apos;,&amp;apos;$&amp;apos;], [&amp;apos;\\(&amp;apos;,&amp;apos;\\)&amp;apos;]]} });     写在前面：这是一篇翻译的博客，译者是我本人。原文在这儿：https:&#x2F;&#x2F;notsquirrel.com&#x2F;pca&#x2F;这并不是授权翻译，所以侵删。">
+<meta name="keywords" content="机器学习,PCA">
+<meta property="og:type" content="article">
+<meta property="og:title" content="PCA,visualized for human beings">
+<meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2019&#x2F;11&#x2F;22&#x2F;PCA-visualized-for-human-beings&#x2F;index.html">
+<meta property="og:site_name" content="Plus of Oval">
+<meta property="og:description" content="MathJax.Hub.Config({ tex2jax: {inlineMath: [[&amp;apos;$&amp;apos;,&amp;apos;$&amp;apos;], [&amp;apos;\\(&amp;apos;,&amp;apos;\\)&amp;apos;]]} });     写在前面：这是一篇翻译的博客，译者是我本人。原文在这儿：https:&#x2F;&#x2F;notsquirrel.com&#x2F;pca&#x2F;这并不是授权翻译，所以侵删。">
+<meta property="og:locale" content="en">
+<meta property="og:image" content="https:&#x2F;&#x2F;notsquirrel.com&#x2F;assets&#x2F;img&#x2F;pca&#x2F;flatten.gif">
+<meta property="og:image" content="https:&#x2F;&#x2F;notsquirrel.com&#x2F;assets&#x2F;img&#x2F;pca&#x2F;btw.gif">
+<meta property="og:image" content="https:&#x2F;&#x2F;notsquirrel.com&#x2F;assets&#x2F;img&#x2F;pca&#x2F;get_mean.gif">
+<meta property="og:image" content="https:&#x2F;&#x2F;notsquirrel.com&#x2F;assets&#x2F;img&#x2F;pca&#x2F;all_means.gif">
+<meta property="og:image" content="https:&#x2F;&#x2F;notsquirrel.com&#x2F;assets&#x2F;img&#x2F;pca&#x2F;single_cov.gif">
+<meta property="og:image" content="https:&#x2F;&#x2F;notsquirrel.com&#x2F;assets&#x2F;img&#x2F;pca&#x2F;3d_vectors.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;notsquirrel.com&#x2F;assets&#x2F;img&#x2F;pca&#x2F;3d_vectors2.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;notsquirrel.com&#x2F;assets&#x2F;img&#x2F;pca&#x2F;eigen_projections.png">
+<meta property="og:updated_time" content="2019-12-11T16:29:09.929Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https:&#x2F;&#x2F;notsquirrel.com&#x2F;assets&#x2F;img&#x2F;pca&#x2F;flatten.gif">
+
+<link rel="canonical" href="http://yoursite.com/2019/11/22/PCA-visualized-for-human-beings/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true,
+    isPage: false,
+    isArchive: false
+  };
+</script>
+
+  <title>PCA,visualized for human beings | Plus of Oval</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Plus of Oval</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+  </div>
+
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-fw fa-user"></i>About</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>Tags</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>Categories</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>Archives</a>
+
+  </li>
+  </ul>
+
+</nav>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="en">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/11/22/PCA-visualized-for-human-beings/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://avatar.saraba1st.com/images/noavatar_small.gif">
+      <meta itemprop="name" content="Oval_plus">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Plus of Oval">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          PCA,visualized for human beings
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2019-11-22 12:41:53" itemprop="dateCreated datePublished" datetime="2019-11-22T12:41:53+08:00">2019-11-22</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2019-12-12 00:29:09" itemprop="dateModified" datetime="2019-12-12T00:29:09+08:00">2019-12-12</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index">
+                    <span itemprop="name">学习</span>
+                  </a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="Views" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">Views: </span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}
+});
+</script>
+<script type="text/javascript" async
+  src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-MML-AM_CHTML">
+</script>
+<blockquote>
+<p>写在前面：<br>这是一篇翻译的博客，译者是我本人。原文在这儿：<a href="https://notsquirrel.com/pca/" target="_blank" rel="noopener">https://notsquirrel.com/pca/</a><br>这并不是授权翻译，所以侵删。  </p>
+</blockquote>
+<a id="more"></a>
+<p><strong>PCA, visualized for human beings</strong><br><strong>可视化给人看的主成分分析</strong>  </p>
+<p>主成分分析 (Principal Component Analysis) 通常在机器学习课程中有如下作用的描述：  </p>
+<ul>
+<li>降维 (Dimensionality reduction)  </li>
+<li>减少特征的相关性 (Decorrelation of features)  </li>
+<li>奇异值分解/矩阵分解 (Singular Value Decomposition/matrix factorization)：$M=U \Sigma V^T $ </li>
+<li>将数据映射到由特征协方差矩阵的前N个特征向量展开的子空间中。  </li>
+</ul>
+<p>对于新学主成分分析的人来说，上面的这些描述一点儿用都没有。我觉得我们可以在动画的帮助下对上面的这些描述有更好的感觉。PCA可以用在很多种类型的数据中，但是在这儿我们仅关注<strong>图像</strong>这一类型。  </p>
+<p>拥有高中水平的统计学与线性代数的方式就能看懂本文。  </p>
+<blockquote>
+<p>这些动画是用<a href="https://github.com/3b1b/manim" target="_blank" rel="noopener"><strong>manim</strong></a>派生的库画的，这超酷的Python库是由<a href="https://www.youtube.com/channel/UCYO_jab_esuFRV4b17AJtAw" target="_blank" rel="noopener"><strong>3blue1brown</strong></a>这位写的。  </p>
+</blockquote>
+<h1 id="图像的协方差矩阵"><a href="#图像的协方差矩阵" class="headerlink" title="图像的协方差矩阵"></a>图像的协方差矩阵</h1><p>什么是图像的协方差矩阵呢？让我们从它的定义出发。  </p>
+<p>说我们有个<em>X</em>，是由$D \times D$正方形图像压成的一条图像。举个例子，假设我们先有一个8x8的方形图片，我们将它压成1x64的像素点组成的行。<br><img src="https://notsquirrel.com/assets/img/pca/flatten.gif" alt="flatten">  </p>
+<p>为了把事情说得简单点，假设图片并没有颜色通道（比如RGB），是一张灰度图片，每个像素的取值仅仅是从0-255。我们可以将0-255的区间归一化到0-1之间。<span id="0-1">$^1$</span><br><img src="https://notsquirrel.com/assets/img/pca/btw.gif" alt="btw">  </p>
+<p>图片X就可以被表示为一个1x64维的向量。  </p>
+<center>$X=[0.0,0.7,0.65,...0.7,0.9]$</center>  
+
+<h2 id="哦这挺棒的，那么什么是协方差矩阵呢？"><a href="#哦这挺棒的，那么什么是协方差矩阵呢？" class="headerlink" title="哦这挺棒的，那么什么是协方差矩阵呢？"></a>哦这挺棒的，那么什么是协方差矩阵呢？</h2><p>那我们来问问<a href="https://en.wikipedia.org/wiki/Covariance_matrix" target="_blank" rel="noopener">维基百科</a>吧。对于一对像素$X_i$与$X_j$来说，协方差矩阵就是这个：  </p>
+<center>$ cov(X_i,X_j) = E[(X_i-E[X_i])(X_j-E[X_j])] $</center>   
+一般而言我们把它写成点积形式：  
+<center>$cov(X,X) = E[(X_i-\mu_X)(X_j-\mu_X)]$</center>  
+
+<h2 id="等一下…期望？-μ-？"><a href="#等一下…期望？-μ-？" class="headerlink" title="等一下…期望？$μ$？"></a>等一下…期望？$μ$？</h2><p>我们不是刚才在讨论单张图片吗？  </p>
+<p>确实，如果我们只有一张图片的话，那么$X_i$确实就等于$E[X_i]$，并且$X$就等于$\mu_X$。就像是只有一个样本时去计算它的平均值一样，计算方差对于单张图片来说毫无意义。所以我们就接着讲下去吧。  </p>
+<h1 id="如果我们有更多的-X-时将会发生什么呢？"><a href="#如果我们有更多的-X-时将会发生什么呢？" class="headerlink" title="如果我们有更多的$X$时将会发生什么呢？"></a>如果我们有更多的$X$时将会发生什么呢？</h1><p>说我们现在有许多不同$X$的观测值，比如说我们有一堆手写的2——说的准确点儿，N个手写的2。一个$X$观测值为1x64大小，但是我们把它降阶到1来看的清楚一点儿。  </p>
+<p>现在我们有了一个$N \times 64$的X观测值集合，我们将这个集合写作黑体的$\textbf{X}$，它看上去就像这样：  </p>
+<center>![twostack](https://notsquirrel.com/assets/img/pca/twostack.gif)</center>  
+
+<p>$\textbf{X}$ 变得更复杂了，我们先讲一下记号。$\textbf{X}$ 被解释为：  </p>
+<ul>
+<li>从1到$D^2$的索引 $i$ ，意为每一个$D^2$像素。  <ul>
+<li>与上例保持连贯性，$D^2=64$  </li>
+<li>通常将 $i$ 记作下标：$X_i$  </li>
+</ul>
+</li>
+<li>从1到$N$的索引$n$，意为每个“观测值”，或者说，不同的图片。  <ul>
+<li>通常将$n$记作括号上标：$X^{(n)}$  </li>
+</ul>
+</li>
+</ul>
+<p>那么，$X_3^{(5)}$就是“第五张图片中的第三个像素的值”的意思。<span id ="2">$^2$</span>  </p>
+<h1 id="计算-mu-X"><a href="#计算-mu-X" class="headerlink" title="计算 $\mu_X$"></a>计算 $\mu_X$</h1><p>现在我们已经可以算出像素 $i$ 的期望值$E[X_i]$：  </p>
+<center>$E[X_i]=\frac{1}{N}\sum_{j=1}^NX_i^{(j)}$</center>  
+
+<p>把用花哨记号表记简单概念的事儿交给数学家们去干吧！我们想说的在这儿了：如果我们从 N 个图片中选出它们的第 $i$ 个像素，将它们的值累加，并除以 N，我们就能得到$E[X_i]$，也就是像素点i的平均值。这很简单。  </p>
+<p><img src="https://notsquirrel.com/assets/img/pca/get_mean.gif" alt="get_mean">  </p>
+<p>如果我们对每个像素都这么干，那我们将会得到64个不同的平均值。然后将他们打包放在$\mu_X$这个向量中：  </p>
+<center>$\mu_X=[E[X_1],E[X_2],...,E[X_{64}]]$</center>  
+<font size=2 color=#9B9B9B>译者注：原文向量$\mu_X$的最后一项的下标是784，应该是写错了</font>  
+
+<p><img src="https://notsquirrel.com/assets/img/pca/all_means.gif" alt="all_means">  </p>
+<h1 id="计算-cov-textbf-X-textbf-X"><a href="#计算-cov-textbf-X-textbf-X" class="headerlink" title="计算 $cov(\textbf{X},\textbf{X})$"></a>计算 $cov(\textbf{X},\textbf{X})$</h1><p>我们来尝试理解<br>$cov(\textbf{X},\textbf{X}) = E[(\textbf{X}-\mu_X)(\textbf{X}-\mu_X)]$  </p>
+<p>首先，我们来看看$cov(X_i,X_j)=E[(X_i-E[X_i])(X_j-E[X_j])]$的含义：特定像素 $i$ 与特定像素 $j$ 之间的协方差。  </p>
+<p>对于每张图片，我们计算它的像素i与平均像素i之间差了多少。我们还算它的像素j与平均像素j之间差了多少。  </p>
+<p>然后我们对每对i与j产生的这两个差值相乘！那么我们将得到多少个结果呢？当然是64 x 64个了。<br>我们的64 x 64组数字可以被整理成一个形如下图的方阵：<br><img src="https://notsquirrel.com/assets/img/pca/single_cov.gif" alt="single_cov">  </p>
+<p>那么我们能构造出多少个像这样的方阵呢？有$N$个——每一张图片都有一个。  </p>
+<p>接下来我们来算这N个方阵的数学期望，也就是均值。数学表达式为：$E[(\textbf{X}-\mu_X)(\textbf{X}-\mu_X)]$  </p>
+<p>注意，对任意值，该式都成立：$cov(X_i,X_j) = E[(X_i-E[X_i])(X_j-E[X_j])]$，对于这个均值矩阵而言：  </p>
+<ul>
+<li>当像素i的值比均值要<em>高</em>且像素j的值将会比均值要<em>大</em>，均值矩阵是<strong>较大且为正</strong>。（反之亦然）  </li>
+<li>当像素i的值比均值要<em>高</em>且像素j的值将会比均值要<em>小</em>时，均值矩阵是<strong>较大且为负</strong>。（反之亦然）  </li>
+<li>当上述情况的概率是五五开的时候，那么均值矩阵将会<strong>接近零</strong>。换句话说，像素i的值较大是不能就此推断出像素j的值的情况的——它更大或更小的概率是差不多的。  </li>
+</ul>
+<h1 id="一个思考实验：填满一张画布"><a href="#一个思考实验：填满一张画布" class="headerlink" title="一个思考实验：填满一张画布"></a>一个思考实验：填满一张画布</h1><p>我们在上面建立了一个概念：对于给定的$cov(X_i,X_j)$，它能测量两个像素之间有多大“相关性”。如果像素i是黑的，那么像素j是否也更倾向于是黑的呢？又或者说它更倾向于是白的？又或者说，像素i的黑白根本没有给出关于像素j颜色的任何信息呢?  </p>
+<p>对于协方差矩阵的第一行，即所有的$cov(X_i,X_j)$中像素$i=1$：<br>$cov(X,X)的第一行=[cov(X_1,X_1),cov(X_1,X_2),…,cov(X_1,X_{64})]$<br>那么和我一起来做个思考实验吧。我给你一张$8\times8$像素的画布，以及一个协方差矩阵，并让你计算有许多样本的未知数字。我有一张这个数字的隐藏图片，并且我将会一个像素一个像素地揭晓。你可以尝试着去猜测这张图片长什么样子来填满你的像素画布。  </p>
+<p>我这么告诉你吧，举个例子，第50个像素是纯黑的，所以你就将像素50填成黑色的。但是你能对于图片的剩余部分做出一些猜想吗？  </p>
+<p>好吧……当然可以了！协方差矩阵的第50行告诉了你图片剩下的像素与像素50之间的关系。如果$cov(X_{50},X_{64})$是负的很厉害的负值，这就告诉了你像素64（在右下角）将实际上是很白的。如果$cov(X_{50},X_{19})$是一个很大的正值，那么这就告诉了你像素19应该是很黑的。  </p>
+<p>事实上，你应该能在现在已经知道#50黑色像素的基础上，看穿图片中每个像素的情况并且为猜测值填出结果了。  </p>
+<p>我可以继续这整个练习，通过再告诉你像素51的情况，以及52的情况，以及53的情况。实际上，你可以遍历全64个像素，对每个像素都这么来一遍，并每次都调整你的猜测直到你把整张图片都覆盖到为止。  </p>
+<p>那么这个过程在哪儿结束呢？好吧，我手里的隐藏图片是2，要拿来计算的协方差矩阵也是许多2的样本。你很有可能以一个看上去像2的东西结束——因为每次我给你一个像素，你就会遍历一遍并且在与其他像素的关系的基础上填充/擦除掉像素格，而这个关系，我们就倾向于在2的图像中得到。    </p>
+<p>如果现在的隐藏图片和2非常不一样——是一条从图片顶端直插下来的黑色线条呢？一般论，我们从未期望这样的黑色线条会出现在2的图片集里，所以它出现在2里的像素协方差应该是在0上下波动。这没有显著的关系。如果我们将上述的练习重复，输出的结果可能并不会长得那么像2——我们极大可能只是得到了一些随机的噪音。  </p>
+<h1 id="如果我们将协方差矩阵看作一个变换式，那么它做了什么呢？"><a href="#如果我们将协方差矩阵看作一个变换式，那么它做了什么呢？" class="headerlink" title="如果我们将协方差矩阵看作一个变换式，那么它做了什么呢？"></a>如果我们将协方差矩阵看作一个变换式，那么它做了什么呢？</h1><p>回到上面的思考实验，我们能得到以下观察结果。要记得我们协方差矩阵是用了一大堆不同的2的图片计算出来的。  </p>
+<ul>
+<li>把协方差矩阵施加在一张2的图片上将会增强像素与2普遍联系的效果。  </li>
+<li>把协方差矩阵施加在一张看上去不像2的图片上只会导致噪音。  </li>
+</ul>
+<p>因此我们可以认为协方差矩阵就像个天真的小孩儿，它只知道怎么画2。如果我们给了它一些看上去和2一致的东西，比方说顶部的曲线或是底部的直线，那么它将在倾向于在2中出现的像素关系基础上去“填充”图片的剩余部分。如果我们给了它一点与2不一致的东西，那么它就只会添加一些无意义的噪音。并且如果我们传入一个完整的2，那么它很有可能加黑现存物。  </p>
+<h1 id="所以协方差阵的特征向量是什么呢？"><a href="#所以协方差阵的特征向量是什么呢？" class="headerlink" title="所以协方差阵的特征向量是什么呢？"></a>所以协方差阵的特征向量是什么呢？</h1><p>这儿有一些我们需要的有关特征向量的基础知识：  </p>
+<ul>
+<li>矩阵是一个变换式。  </li>
+<li>矩阵的一个特征向量能够在不改变矩阵方向的情况下进行矩阵变换，只有矩阵的大小变了。  </li>
+<li>对应的特征值也改变了同样的大小。  </li>
+</ul>
+<p>（如果你对此没有理解，在这儿停下然后<a href="https://www.youtube.com/watch?v=PFDu9oVAE-g" target="_blank" rel="noopener">去观看3blue1brown做的超赞视频</a>）  </p>
+<p>回到我们在上一步找到的协方差矩阵，特征向量是什么呢？  </p>
+<p><strong>他们是能够只改变矩阵的大小的前提下而不改变矩阵方向的情况下进行矩阵变换的图片。</strong><br><font size=2 color=#9B9B9B>译者注：这里的意思就是特征向量是在矩阵变换过程中只发生伸缩变换而不发生剪切或是旋转变换的量，在现在的情况下，量指的就是图片。</font>   </p>
+<h2 id="……你说的改变方向指的是什么？"><a href="#……你说的改变方向指的是什么？" class="headerlink" title="……你说的改变方向指的是什么？"></a>……你说的改变方向指的是什么？</h2><p>老实说，人类的大脑在可视化超过三维的东西时就表现得很糟。所以让我们来思考只有三个像素的图片。  </p>
+<ul>
+<li><p>想象[0, 0.2, 0.1], [0, 0.4, 0.2]与[0, 1.0, 0.5]。这些向量都“指向”同一个方向，它们只是大小有所不同。  </p>
+<center><img src="https://notsquirrel.com/assets/img/pca/3d_vectors.png" width = 25% height = 25%></center>  
+</li>
+<li><p>现在来想象[0, 1, 1], [1, 1, 0]与[1, 0, 1]。这些向量都<em>没有</em>指向同一个方向，尽管它们的大小一样。  </p>
+<img src="https://notsquirrel.com/assets/img/pca/3d_vectors2.png" width = 25% height = 25% text-align= center>  
+
+</li>
+</ul>
+<p>所以就图片的内容而言，“没有改变方向”的意思是<strong>像素呆在同样的位置</strong>。它们可能会变得更亮或是更暗，但是它们<strong>相互之间的比例是保持不变的</strong>。  </p>
+<h1 id="所以我们为什么要将特征向量作为新的基呢……"><a href="#所以我们为什么要将特征向量作为新的基呢……" class="headerlink" title="所以我们为什么要将特征向量作为新的基呢……"></a>所以我们为什么要将特征向量作为新的基呢……</h1><p>现在应该是稍微清晰一点儿了：协方差矩阵的特征向量是能够遍历矩阵的图片，并且这些图片只会变得更亮或是更暗——<strong>但是像素之间的关系却不会改变</strong>。  </p>
+<p>特别值得注意的是，一个有着特征值为正且数量大的对应特征向量将会在图片上变得更长——或者说是在图片的内容上会变得更长。它的像素在遍历过协方差矩阵后会变得更重要。  </p>
+<p>我们可以想象的是，如果我们用特定的一沓图片中来计算我们的协方差矩阵的话，比方说这沓图片只是一个特定的数字，那么特征向量将会以<strong>这个数字的典型</strong>的结构来编码（至少是在你的数据集内）。  </p>
+<p>事实上，我们应该能够<strong>在一定数量集上</strong>向这些特征向量上再行添加，然后能够得到一个看上去很像我们原有图片的玩意儿！  </p>
+<p>那么这个数量集又是什么呢？这就要说到……  </p>
+<h1 id="去相关与降维"><a href="#去相关与降维" class="headerlink" title="去相关与降维"></a>去相关与降维</h1><p>协方差矩阵是对两个一模一样矩阵进行乘法得到的，所以协方差矩阵应该是实且对称的。（意味着，第一行与第一列相等，第二行与第二列相等，等等）<br><font size=2 color=#9B9B9B>译者注：即$A^T = A$</font>  </p>
+<center>$cov(X, X)=E[(X-\mu_{X})(X-\mu_{X})]$</center>  
+
+<p>实对称矩阵的特征向量相互<strong>正交</strong>。再提一次，在想象一个超过三维的空间中的90度角是很困难的。不过正交就意味着<strong>在特征向量里没有冗余的信息</strong>。  </p>
+<p>如果我们尝试通过添加特征向量的方式来构筑图片，每一个额外添加的向量所为图片添加的信息都不能代表其他的向量所包含的信息。  </p>
+<p>（如果不能直观地理解这些，那么就这么想：如果你人在点A，而点B在你的西北方向，那么你只朝北走是到不了点B的，你必须还得朝西走才行。我们说北和西是相互<strong>正交</strong>的。）  </p>
+<p>这就是用PCA来去除特征的相关性的意义：通过利用特征向量作为代表这些图片的新的基，我们<strong>自然而然地保证了我们的基是正交向量构成的</strong>。  </p>
+<p>话说什么是降维？一个$K\times K$的协方差矩阵会有K个特征向量，但是你当然不需要为了优雅地重构矩阵而全都用上这些向量。你可以仅仅在你的基中使用4个特征向量就获得一个优雅的MNIST数值重构结果，而这些特征向量可以通过特定类的数据来计算出来：  </p>
+<img src="https://notsquirrel.com/assets/img/pca/eigen_projections.png" text-align= center>  
+
+<h1 id="如何去寻找这些特征向量，以及我们要用多少特征向量呢？"><a href="#如何去寻找这些特征向量，以及我们要用多少特征向量呢？" class="headerlink" title="如何去寻找这些特征向量，以及我们要用多少特征向量呢？"></a>如何去寻找这些特征向量，以及我们要用多少特征向量呢？</h1><p>奇异值分解（SVD）在线性代数中指的是将矩阵$M$分解成包含如下元素的操作：  </p>
+<center>$M=U \Sigma V$</center>  
+
+<ul>
+<li>$M$是我们的最初的矩阵，我们要寻找它的特征值。因此它就是从我们所有的图像所得出的协方差矩阵。  </li>
+<li>U的列是左奇异向量，V的列则是右奇异向量。对于<strong>半正定</strong>的协方差矩阵来说，$U=V$，并且它的列就是我们想要找的特征向量。  </li>
+<li>$\Sigma$对角线上的值就是我们在完成了由$M$定义的变换后所得到的特征向量的变换的大小。  </li>
+</ul>
+<p>一旦我们得到了$U$，我们就可以简单地拿到我们想要数目的特征向量了。（我们通常拿前$n$个最大特征值对应的特征向量。）而后我们“使用”（点乘）$X$来获得<strong>通过我们降维后的$U$而得来的$X$在新的子空间上的投射</strong>（我们将它在下面的代码中称之为W。）  </p>
+<p>将这个应用在Python中实际上非常简单——这里就有一个你应该可以操作的例子。接下来的例子是假设你的数据已经被预处理成了零基的。获取更好的解释请参考<a href="http://cs231n.github.io/neural-networks-2/#datapre" target="_blank" rel="noopener">http://cs231n.github.io/neural-networks-2/#datapre.</a>  </p>
+<pre><code>class Pca:
+    &apos;&apos;&apos;
+    A simple class to run PCA and store the truncated U matrix for use on the test set.
+    &apos;&apos;&apos;
+
+    def __init__(self):
+        self.W = None
+
+    def pca_train(self, X, n=5):
+        &apos;&apos;&apos;
+        Helper function to perform PCA on X and store the chosen eigenvectors from U.
+
+        If input X is T x d,
+
+        transformed X&apos; is T x d&apos;
+
+        Also saves the chosen columns of U to self.W.
+
+        Based heavily on http://cs231n.github.io/neural-networks-2/.
+        &apos;&apos;&apos;
+
+        # PCA down to top n eigenvectors
+        # Assume input data matrix X of size [T x d]
+        cov = np.dot(X.T, X) / X.shape[0] # get the data covariance matrix
+        U,S,V = np.linalg.svd(cov)
+
+        # eigenvectors are returned sorted by eigenvalue; get top n
+        X_prime = np.dot(X, U[:,:n]) 
+
+        # save W = U[:,:n] for use again in testing; we only train
+        # PCA on the TRAIN SET to prevent data leakage!
+        self.W = U[:,:n]
+
+        return X_prime
+
+    def pca_transform(self, X):
+        &apos;&apos;&apos;
+        Use the previously trained U to transform an input X (i.e. test data)
+        &apos;&apos;&apos;
+        assert self.W is not None, &quot;pca_test() called when self.W is None. Did you call pca_train() first?&quot;
+        return np.dot(X, self.W)</code></pre><ol>
+<li>通常情况下，0代表的是黑色，255代表的是白色。为了简化，我们在博客中改变了这个传统来使得博文看上去简单：在博文中1是纯黑色的像素。<a href="#0-1">点我看文中的描述</a>  </li>
+<li>注意——用这个加粗的$\textbf{X}$的记号代表一组$X$数据点是十分常见的，但是这当然不标准。机器学习的文献记号到处都是，务必仔细阅读。<a href="#2">点我看文中的描述</a>  </li>
+</ol>
+<p>2019/12/12     </p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/" rel="tag"># 机器学习</a>
+              <a href="/tags/PCA/" rel="tag"># PCA</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-next post-nav-item">
+                <a href="/2019/11/16/%E8%BF%91%E5%86%B5-1/" rel="next" title="近况">
+                  <i class="fa fa-chevron-left"></i> 近况
+                </a>
+            </div>
+
+            <span class="post-nav-divider"></span>
+
+            <div class="post-nav-prev post-nav-item">
+                <a href="/2019/11/28/2019-11-21%20test/" rel="prev" title="2019/11/21 Mathematical Principle in Data Science Test">
+                  2019/11/21 Mathematical Principle in Data Science Test <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+  </div>
+
+
+          </div>
+          
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#图像的协方差矩阵"><span class="nav-number">1.</span> <span class="nav-text">图像的协方差矩阵</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#哦这挺棒的，那么什么是协方差矩阵呢？"><span class="nav-number">1.1.</span> <span class="nav-text">哦这挺棒的，那么什么是协方差矩阵呢？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#等一下…期望？-μ-？"><span class="nav-number">1.2.</span> <span class="nav-text">等一下…期望？$μ$？</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#如果我们有更多的-X-时将会发生什么呢？"><span class="nav-number">2.</span> <span class="nav-text">如果我们有更多的$X$时将会发生什么呢？</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#计算-mu-X"><span class="nav-number">3.</span> <span class="nav-text">计算 $\mu_X$</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#计算-cov-textbf-X-textbf-X"><span class="nav-number">4.</span> <span class="nav-text">计算 $cov(\textbf{X},\textbf{X})$</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#一个思考实验：填满一张画布"><span class="nav-number">5.</span> <span class="nav-text">一个思考实验：填满一张画布</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#如果我们将协方差矩阵看作一个变换式，那么它做了什么呢？"><span class="nav-number">6.</span> <span class="nav-text">如果我们将协方差矩阵看作一个变换式，那么它做了什么呢？</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#所以协方差阵的特征向量是什么呢？"><span class="nav-number">7.</span> <span class="nav-text">所以协方差阵的特征向量是什么呢？</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#……你说的改变方向指的是什么？"><span class="nav-number">7.1.</span> <span class="nav-text">……你说的改变方向指的是什么？</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#所以我们为什么要将特征向量作为新的基呢……"><span class="nav-number">8.</span> <span class="nav-text">所以我们为什么要将特征向量作为新的基呢……</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#去相关与降维"><span class="nav-number">9.</span> <span class="nav-text">去相关与降维</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#如何去寻找这些特征向量，以及我们要用多少特征向量呢？"><span class="nav-number">10.</span> <span class="nav-text">如何去寻找这些特征向量，以及我们要用多少特征向量呢？</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <img class="site-author-image" itemprop="image" alt="Oval_plus"
+    src="https://avatar.saraba1st.com/images/noavatar_small.gif">
+  <p class="site-author-name" itemprop="name">Oval_plus</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">10</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">3</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">12</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Oval_plus</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a>
+  </div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">Theme – <a href="https://mist.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Mist</a>
+  </div>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="Total Visitors">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="Total Views">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+<script src="/js/utils.js"></script>
+<script src="/js/schemes/muse.js"></script>
+<script src="/js/next-boot.js"></script>
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+</body>
+</html>
