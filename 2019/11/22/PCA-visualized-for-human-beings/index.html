@@ -60,13 +60,14 @@
 <meta property="og:locale" content="en">
 <meta property="og:image" content="https:&#x2F;&#x2F;notsquirrel.com&#x2F;assets&#x2F;img&#x2F;pca&#x2F;flatten.gif">
 <meta property="og:image" content="https:&#x2F;&#x2F;notsquirrel.com&#x2F;assets&#x2F;img&#x2F;pca&#x2F;btw.gif">
+<meta property="og:image" content="https:&#x2F;&#x2F;notsquirrel.com&#x2F;assets&#x2F;img&#x2F;pca&#x2F;twostack.gif">
 <meta property="og:image" content="https:&#x2F;&#x2F;notsquirrel.com&#x2F;assets&#x2F;img&#x2F;pca&#x2F;get_mean.gif">
 <meta property="og:image" content="https:&#x2F;&#x2F;notsquirrel.com&#x2F;assets&#x2F;img&#x2F;pca&#x2F;all_means.gif">
 <meta property="og:image" content="https:&#x2F;&#x2F;notsquirrel.com&#x2F;assets&#x2F;img&#x2F;pca&#x2F;single_cov.gif">
 <meta property="og:image" content="https:&#x2F;&#x2F;notsquirrel.com&#x2F;assets&#x2F;img&#x2F;pca&#x2F;3d_vectors.png">
 <meta property="og:image" content="https:&#x2F;&#x2F;notsquirrel.com&#x2F;assets&#x2F;img&#x2F;pca&#x2F;3d_vectors2.png">
 <meta property="og:image" content="https:&#x2F;&#x2F;notsquirrel.com&#x2F;assets&#x2F;img&#x2F;pca&#x2F;eigen_projections.png">
-<meta property="og:updated_time" content="2019-12-11T16:29:09.929Z">
+<meta property="og:updated_time" content="2019-12-12T01:15:32.266Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https:&#x2F;&#x2F;notsquirrel.com&#x2F;assets&#x2F;img&#x2F;pca&#x2F;flatten.gif">
 
@@ -230,7 +231,7 @@
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2019-12-12 00:29:09" itemprop="dateModified" datetime="2019-12-12T00:29:09+08:00">2019-12-12</time>
+                <time title="Modified: 2019-12-12 09:15:32" itemprop="dateModified" datetime="2019-12-12T09:15:32+08:00">2019-12-12</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -283,7 +284,7 @@ tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}
 <li>将数据映射到由特征协方差矩阵的前N个特征向量展开的子空间中。  </li>
 </ul>
 <p>对于新学主成分分析的人来说，上面的这些描述一点儿用都没有。我觉得我们可以在动画的帮助下对上面的这些描述有更好的感觉。PCA可以用在很多种类型的数据中，但是在这儿我们仅关注<strong>图像</strong>这一类型。  </p>
-<p>拥有高中水平的统计学与线性代数的方式就能看懂本文。  </p>
+<p>有高中水平的统计学与线性代数的姿势就能看懂本文。  </p>
 <blockquote>
 <p>这些动画是用<a href="https://github.com/3b1b/manim" target="_blank" rel="noopener"><strong>manim</strong></a>派生的库画的，这超酷的Python库是由<a href="https://www.youtube.com/channel/UCYO_jab_esuFRV4b17AJtAw" target="_blank" rel="noopener"><strong>3blue1brown</strong></a>这位写的。  </p>
 </blockquote>
@@ -302,8 +303,7 @@ tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}
 <p>确实，如果我们只有一张图片的话，那么$X_i$确实就等于$E[X_i]$，并且$X$就等于$\mu_X$。就像是只有一个样本时去计算它的平均值一样，计算方差对于单张图片来说毫无意义。所以我们就接着讲下去吧。  </p>
 <h1 id="如果我们有更多的-X-时将会发生什么呢？"><a href="#如果我们有更多的-X-时将会发生什么呢？" class="headerlink" title="如果我们有更多的$X$时将会发生什么呢？"></a>如果我们有更多的$X$时将会发生什么呢？</h1><p>说我们现在有许多不同$X$的观测值，比如说我们有一堆手写的2——说的准确点儿，N个手写的2。一个$X$观测值为1x64大小，但是我们把它降阶到1来看的清楚一点儿。  </p>
 <p>现在我们有了一个$N \times 64$的X观测值集合，我们将这个集合写作黑体的$\textbf{X}$，它看上去就像这样：  </p>
-<center>![twostack](https://notsquirrel.com/assets/img/pca/twostack.gif)</center>  
-
+<p><img src="https://notsquirrel.com/assets/img/pca/twostack.gif" alt="twostack">  </p>
 <p>$\textbf{X}$ 变得更复杂了，我们先讲一下记号。$\textbf{X}$ 被解释为：  </p>
 <ul>
 <li>从1到$D^2$的索引 $i$ ，意为每一个$D^2$像素。  <ul>
@@ -440,7 +440,7 @@ tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}
         assert self.W is not None, &quot;pca_test() called when self.W is None. Did you call pca_train() first?&quot;
         return np.dot(X, self.W)</code></pre><ol>
 <li>通常情况下，0代表的是黑色，255代表的是白色。为了简化，我们在博客中改变了这个传统来使得博文看上去简单：在博文中1是纯黑色的像素。<a href="#0-1">点我看文中的描述</a>  </li>
-<li>注意——用这个加粗的$\textbf{X}$的记号代表一组$X$数据点是十分常见的，但是这当然不标准。机器学习的文献记号到处都是，务必仔细阅读。<a href="#2">点我看文中的描述</a>  </li>
+<li>注意——用这个加粗的$\textbf{X}$的记号代表一组$X$数据点是十分常见的，但是这当然不标准。机器学习的文献记号到处都是多种多样，务必仔细阅读。<a href="#2">点我看文中的描述</a>  </li>
 </ol>
 <p>2019/12/12     </p>
 
