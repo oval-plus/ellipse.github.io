@@ -58,7 +58,7 @@
 <meta property="og:site_name" content="Plus of Oval">
 <meta property="og:description" content="After installing MySQL 8.0, some problems emerged, like MySql cannot be started in cmd.">
 <meta property="og:locale" content="en">
-<meta property="og:updated_time" content="2019-12-11T16:29:18.719Z">
+<meta property="og:updated_time" content="2019-12-12T01:44:03.070Z">
 <meta name="twitter:card" content="summary">
 
 <link rel="canonical" href="http://yoursite.com/2019/11/29/Cannot-start-MySQL-solution/">
@@ -221,7 +221,7 @@
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2019-12-12 00:29:18" itemprop="dateModified" datetime="2019-12-12T00:29:18+08:00">2019-12-12</time>
+                <time title="Modified: 2019-12-12 09:44:03" itemprop="dateModified" datetime="2019-12-12T09:44:03+08:00">2019-12-12</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -266,7 +266,7 @@
 <li><p>Third, <code>mysqld --initialize</code> is required before input <code>net start mysql</code>.  If <code>net start mysql</code> does not work after initialization, delete the <strong>data</strong> folder in /mysql/mysql server folder, and initialize again. </p>
 </li>
 <li><p>If cmd reminds that ‘MySQL cannot start’ but it does not report any error, use <code>mysqld --console</code> to check the error.  If the problem is caused by the port is used, like 3306, use <code>netstat -ano|findstr 3306</code> to find the pid of process listening 3306 port, then kill it with <code>taskkill /f /pid *</code>, replacing * with the pid.  </p>
-<p>The problem would be solved.  <code>net start mysql</code> would work and enjoy coding.<br><strong>DO NOT FORGET TYPE SEMICOLON AT THE END OF CHANGING PASSWORD COMMAND</strong> <code>ALTER USER &#39;root&#39;@&#39;localhost&#39; IDENTIFIED WITH mysql_native_password BY &#39;Freeaxis@666&#39;;</code>, involving number,symbols capiltal and lower case letters  </p>
+<p>The problem would be solved.  <code>net start mysql</code> would work and enjoy coding.<br><strong>DO NOT FORGET TYPE SEMICOLON AT THE END OF CHANGING PASSWORD COMMAND</strong> <code>ALTER USER &#39;root&#39;@&#39;localhost&#39; IDENTIFIED WITH mysql_native_password BY &#39;******&#39;;</code>, involving number,symbols capiltal and lower case letters  </p>
 </li>
 </ul>
 <p>2019/11/29</p>
