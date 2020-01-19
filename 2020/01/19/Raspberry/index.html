@@ -50,15 +50,15 @@
   };
 </script>
 
-  <meta name="description" content="It is not difficult to deploy Raspberry since there are many guides online.  This post is to remind myself of some points  during the deployment.   Use the SD Formatter to format the SD card unless th">
+  <meta name="description" content="It is not difficult to deploy Raspberry since there are many guides online.  This post is to remind myself of some points  during the deployment.">
 <meta name="keywords" content="Raspberry">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Deploy Raspberry">
 <meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2020&#x2F;01&#x2F;19&#x2F;Raspberry&#x2F;index.html">
 <meta property="og:site_name" content="Plus of Oval">
-<meta property="og:description" content="It is not difficult to deploy Raspberry since there are many guides online.  This post is to remind myself of some points  during the deployment.   Use the SD Formatter to format the SD card unless th">
+<meta property="og:description" content="It is not difficult to deploy Raspberry since there are many guides online.  This post is to remind myself of some points  during the deployment.">
 <meta property="og:locale" content="en">
-<meta property="og:updated_time" content="2020-01-19T13:32:32.032Z">
+<meta property="og:updated_time" content="2020-01-19T13:37:31.314Z">
 <meta name="twitter:card" content="summary">
 
 <link rel="canonical" href="http://yoursite.com/2020/01/19/Raspberry/">
@@ -215,7 +215,7 @@
               <span class="post-meta-item-text">Posted on</span>
               
 
-              <time title="Created: 2020-01-19 20:41:53 / Modified: 21:32:32" itemprop="dateCreated datePublished" datetime="2020-01-19T20:41:53+08:00">2020-01-19</time>
+              <time title="Created: 2020-01-19 20:41:53 / Modified: 21:37:31" itemprop="dateCreated datePublished" datetime="2020-01-19T20:41:53+08:00">2020-01-19</time>
             </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -247,19 +247,22 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <p>It is not difficult to deploy Raspberry since there are many guides online.  This post is to remind myself of some points  during the deployment.  </p><ul>
+        <p>It is not difficult to deploy Raspberry since there are many guides online.  This post is to remind myself of some points  during the deployment.  </p>
+<a id="more"></a>   
+<ul>
 <li>Use the <strong>SD Formatter</strong> to format the SD card unless the blank space remains in Linux would lead Raspberry cannot read the SD card.  </li>
 <li>Download the system deploy image (intact) from official site.  </li>
 <li>Use <strong>Win32DiskImager</strong> to write image into the SD card.</li>
-<li>Ensure the power supply is safe and stable.  If the voltage is not stable, it may even burn the chip.  If the voltage is cannot high enough, the chip cannot work.  </li>
+<li>Ensure the power supply is safe and stable.  If the voltage is not stable, it may even burn the chip.  If the voltage is not high enough, the chip cannot work.  </li>
 <li>If insert the SD card into PC again, the console would warn you that one of the partitions in the card requires to be formatted.  <strong>IGNORE THE WARNING</strong>, unless you want to rewrite the system in SD card.  If you format the partition, Raspberry cannot read the SD card correctly.</li>
 <li>(For users deploy raspberry without screen) <em>Enable the SSH</em> Enter <strong>BOOT</strong> patition in SD card, create a txt named as <strong>‘ssh’</strong>, and erase the extension of the txt file or use <code>sudo raspi-config</code> in command.  </li>
 <li>Connect power and reticle to the chip. </li>
 <li>Use <strong>PUTTY</strong> to establish the remote desktop connection.  Check Raspberry’s IP address on router managing site.  If the connection is refused, check the ssh file is created and whether the partition is formatted correctly.</li>
 <li><strong>User: pi; Password: raspberry</strong></li>
-<li>Windows + R, input ‘mstsc’ to activate the remote desktop manager.  Input the chip’s ip address.  After connecting, user, password is above.  </li>
+<li>Windows + R, input ‘mstsc’ to activate the remote desktop manager.  Input the chip’s IP address.  After connecting, user, password is above.  </li>
 <li>Then Raspberry is deployed.</li>
 </ul>
+
     </div>
 
     
