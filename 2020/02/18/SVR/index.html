@@ -50,14 +50,21 @@
   };
 </script>
 
-  <meta property="og:type" content="website">
-<meta property="og:title" content="Plus of Oval">
-<meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;tags&#x2F;Anime-Movie&#x2F;index.html">
+  <meta name="description" content="MathJax.Hub.Config({ tex2jax: {inlineMath: [[&amp;apos;$&amp;apos;,&amp;apos;$&amp;apos;], [&amp;apos;\\(&amp;apos;,&amp;apos;\\)&amp;apos;]]} });    为啥写这篇呢？其实这篇的长度是不足以支撑一篇博文的，原因是这几天太混了净看机核和秦先生了，总归要有点产出，再加上之前也说要写支持向量回归来着，所以就有了这篇。">
+<meta name="keywords" content="SVR,Machine Learning">
+<meta property="og:type" content="article">
+<meta property="og:title" content="SVR">
+<meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2020&#x2F;02&#x2F;18&#x2F;SVR&#x2F;index.html">
 <meta property="og:site_name" content="Plus of Oval">
+<meta property="og:description" content="MathJax.Hub.Config({ tex2jax: {inlineMath: [[&amp;apos;$&amp;apos;,&amp;apos;$&amp;apos;], [&amp;apos;\\(&amp;apos;,&amp;apos;\\)&amp;apos;]]} });    为啥写这篇呢？其实这篇的长度是不足以支撑一篇博文的，原因是这几天太混了净看机核和秦先生了，总归要有点产出，再加上之前也说要写支持向量回归来着，所以就有了这篇。">
 <meta property="og:locale" content="en">
+<meta property="og:image" content="https:&#x2F;&#x2F;i.loli.net&#x2F;2020&#x2F;02&#x2F;18&#x2F;1xD7LavosqS8f4z.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;i.loli.net&#x2F;2020&#x2F;02&#x2F;18&#x2F;vilxV3C7gSzuyDH.png">
+<meta property="og:updated_time" content="2020-02-17T18:18:11.523Z">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https:&#x2F;&#x2F;i.loli.net&#x2F;2020&#x2F;02&#x2F;18&#x2F;1xD7LavosqS8f4z.png">
 
-<link rel="canonical" href="http://yoursite.com/tags/Anime-Movie/">
+<link rel="canonical" href="http://yoursite.com/2020/02/18/SVR/">
 
 
 <script id="page-configurations">
@@ -65,13 +72,13 @@
   CONFIG.page = {
     sidebar: "",
     isHome: false,
-    isPost: false,
+    isPost: true,
     isPage: false,
     isArchive: false
   };
 </script>
 
-  <title>Tag: Anime Movie | Plus of Oval</title>
+  <title>SVR | Plus of Oval</title>
   
 
 
@@ -182,70 +189,127 @@
           <div class="content">
             
 
+  <div class="posts-expand">
+      
   
   
-  
-  <div class="post-block">
-    <div class="posts-collapse">
-      <div class="collection-title">
-        <h1 class="collection-header">Anime Movie
-          <small>Tag</small>
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="en">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/02/18/SVR/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://avatar.saraba1st.com/images/noavatar_small.gif">
+      <meta itemprop="name" content="Oval_plus">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Plus of Oval">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          SVR
         </h1>
-      </div>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2020-02-18 00:10:56 / Modified: 02:18:11" itemprop="dateCreated datePublished" datetime="2020-02-18T00:10:56+08:00">2020-02-18</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Learning/" itemprop="url" rel="index">
+                    <span itemprop="name">Learning</span>
+                  </a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="Views" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">Views: </span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
 
       
-    <div class="collection-year">
-      <h1 class="collection-header">2019</h1>
-    </div>
+        <script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}
+});
+</script>
+<script type="text/javascript" async
+  src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-MML-AM_CHTML">
+</script>
+<p>为啥写这篇呢？其实这篇的长度是不足以支撑一篇博文的，原因是这几天太混了净看机核和秦先生了，总归要有点产出，再加上之前也说要写支持向量回归来着，所以就有了这篇。  </p>
+<a id="more"></a>
+<p>支持向量回归是指利用支持向量机来建立回归模型，回归模型是这个样子的：<br>$f(x) = w^Tx+b$<br>没错，就是那个超平面。<br>要说支持向量回归和传统回归有什么不同的，主要就是在计算损失的方式上。支持向量回归可以容忍模型输出和真实输出之间有$\epsilon$的差别。<br><img src="https://i.loli.net/2020/02/18/1xD7LavosqS8f4z.png" alt="20161022121703257.png"><br>如这个图的左半部分，当f(x)落入阴影部分，也就是2ε的时候就认为它是预测准确的，剩下的训练样本都得去计算损失。<br>那么其实还是去计算各个参数，式子写起来就是这样子的：  </p>
+<center>
+$min_{w,b} \frac{1}{2}||w||^2+C\sum^m_{i=1}l_\epsilon(f(x_i)-y_i)$
+</center>  
+C的作用和SVM里差不太多，$l_c$是一个函数，和软间隔里的那个合页损失函数啊，指数函数啊差不太多，但是它叫$\epsilon$函数，也叫$\epsilon-$不敏感损失函数。图像长上面这图的右半部分那个。写起来是下面这样：  
+$l_\epsilon(z)=
+\begin{cases}
+0,& if\ |z|\le\epsilon;\\
+|z|-\epsilon,& otherwise.\\
+\end{cases}$  
 
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <div class="post-meta">
-        <time itemprop="dateCreated"
-              datetime="2019-12-12T09:19:37+08:00"
-              content="2019-12-12">
-          12-12
-        </time>
-      </div>
-
-      <h2 class="post-title">
-          <a class="post-title-link" href="/2019/12/12/%E6%B1%A4%E6%B5%85%E8%A6%81%E6%81%B0%E9%A5%AD%E7%9A%84/" itemprop="url">
-            <span itemprop="name">汤浅要恰饭的</span>
-          </a>
-      </h2>
-
-    </header>
-  </article>
-
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <div class="post-meta">
-        <time itemprop="dateCreated"
-              datetime="2019-11-04T10:54:01+08:00"
-              content="2019-11-04">
-          11-04
-        </time>
-      </div>
-
-      <h2 class="post-title">
-          <a class="post-title-link" href="/2019/11/04/%E8%AF%9A%E5%93%A5%E4%B8%8B%E9%83%A8%E7%89%87%E4%BB%80%E4%B9%88%E6%97%B6%E5%80%99%E5%87%BA/" itemprop="url">
-            <span itemprop="name">诚哥下部片什么时候出</span>
-          </a>
-      </h2>
-
-    </header>
-  </article>
+<p>然后呢，再加两个松弛变量$\xi_i$和$\hat{\xi_i}$，这两个松弛变量意思就是间隔带两侧的松弛程度可以有所不同。那么上面那个最小化函数就可以变一变了。<br>$min_{w,b,\xi_i,\hat{\xi_i}}\frac{1}{2}||w||^2+C\sum^m_{i=1}(\xi_i+\hat{\xi_i})$<br>$\begin{aligned}<br>s.t.&amp; f(x_i)-y_i\le\epsilon+\xi_i, \<br>&amp;y_i-f(x_i)\le\epsilon+\hat{\xi_i}, \<br>&amp;\xi_i\ge0,\hat{\xi_i}\ge0,i=1,2,…,m<br>\end{aligned}$<br>得一拉格朗日函数，然后几个参数的偏导为零，就得到了SVR的对偶问题。过程如下图：<br><img src="https://i.loli.net/2020/02/18/vilxV3C7gSzuyDH.png" alt="20161022143158224.png"><br>有一个值得注意的是，w的偏导为零的式子直接带进$f(x) = w^Tx+b$，就能得到SVR的解：<br>$f(x)=\sum^m_{i=1}(\hat{\alpha_i}-\alpha_i)x_i^Tx+b$<br>能够让上面这个式子里的$(\hat{\alpha_i}-\alpha_i)\ne0$的样本就是SVR的支持向量，而解出这个就得借助图上的最后一个式子，这个式子用了核方法。  </p>
+<p>核方法比较核心的内容是LDA。主要目的是要把类间散度矩阵搞成核函数的形式就能解决这里的问题。<br>支持向量回归有个好处就是在于它不会过于迁就一些噪音，从而减少了过拟合的危险。    </p>
+<p>关于核对率回归，看这儿：<a href="https://zhuanlan.zhihu.com/p/49023182" target="_blank" rel="noopener">机器学习（周志华）课后习题——第六章——支持向量机</a><br>不用担心闪退可真是太棒了  </p>
+<p>2020/02/18</p>
 
     </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/SVR/" rel="tag"># SVR</a>
+              <a href="/tags/Machine-Learning/" rel="tag"># Machine Learning</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-next post-nav-item">
+                <a href="/2020/02/09/Decorator-Decorator-Pattern-2/" rel="next" title="Decorator & Decorator Pattern (2)">
+                  <i class="fa fa-chevron-left"></i> Decorator & Decorator Pattern (2)
+                </a>
+            </div>
+
+            <span class="post-nav-divider"></span>
+
+            <div class="post-nav-prev post-nav-item">
+            </div>
+          </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
   </div>
-  
-  
-  
-
-  
-
 
 
           </div>
