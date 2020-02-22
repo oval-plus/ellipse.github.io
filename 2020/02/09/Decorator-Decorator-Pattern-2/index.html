@@ -58,7 +58,7 @@
 <meta property="og:site_name" content="Plus of Oval">
 <meta property="og:description" content="这篇就来写类装饰器和装饰器模式。最后再写几个装饰器的例子   类装饰器类装饰器就是装饰类的装饰器，它的主要目的在不使用继承或者是元类的情况下，通过reflect或者是修改类定义的某些部分来改写类的功能。主要要注意的是要保证装饰器在@classmethod之前。">
 <meta property="og:locale" content="en">
-<meta property="og:updated_time" content="2020-02-17T18:26:26.007Z">
+<meta property="og:updated_time" content="2020-02-21T18:07:42.434Z">
 <meta name="twitter:card" content="summary">
 
 <link rel="canonical" href="http://yoursite.com/2020/02/09/Decorator-Decorator-Pattern-2/">
@@ -221,7 +221,7 @@
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2020-02-18 02:26:26" itemprop="dateModified" datetime="2020-02-18T02:26:26+08:00">2020-02-18</time>
+                <time title="Modified: 2020-02-22 02:07:42" itemprop="dateModified" datetime="2020-02-22T02:07:42+08:00">2020-02-22</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -258,187 +258,32 @@
 <a id="more"></a>
 <p>这里的例子就偷懒直接用的python cookbook上的例子。就是直接得到类的属性，是用来打印日志的。</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">log_getattribute</span><span class="params">(cls)</span>:</span></span><br><span class="line">    <span class="comment"># Get the original implementation</span></span><br><span class="line">    orig_getattribute = cls.__getattribute__</span><br><span class="line"></span><br><span class="line">    <span class="comment"># Make a new definition</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">new_getattribute</span><span class="params">(self, name)</span>:</span></span><br><span class="line">        print(<span class="string">'getting:'</span>, name)</span><br><span class="line">        <span class="keyword">return</span> orig_getattribute(self, name)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># Attach to the class and return</span></span><br><span class="line">    cls.__getattribute__ = new_getattribute</span><br><span class="line">    <span class="keyword">return</span> cls</span><br><span class="line"></span><br><span class="line"><span class="comment"># Example use</span></span><br><span class="line"><span class="meta">@log_getattribute</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">A</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self,x)</span>:</span></span><br><span class="line">        self.x = x</span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">spam</span><span class="params">(self)</span>:</span></span><br><span class="line">        <span class="keyword">pass</span></span><br><span class="line"></span><br><span class="line">a = A(<span class="number">42</span>)</span><br><span class="line">a.x</span><br><span class="line">a.spam()</span><br></pre></td></tr></table></figure>
-<h1 id="几个例子"><a href="#几个例子" class="headerlink" title="几个例子#"></a>几个例子#</h1><p>有关日志的写法就不在这里赘述了，因为上面那个例子就可以用来打印日志。</p>
+<h1 id="几个例子"><a href="#几个例子" class="headerlink" title="几个例子"></a>几个例子</h1><p>有关日志的写法就不在这里赘述了，因为上面那个例子就可以用来打印日志。</p>
 <h2 id="单例模式"><a href="#单例模式" class="headerlink" title="单例模式"></a>单例模式</h2><p>首发就是单例模式，这是用装饰器实现的。用函数写的装饰器。单例模式应该以后会再写一篇文章水一下，这里就不展开讲讲了。总之输出的结果应该是：  </p>
 <blockquote>
 <p>&lt;<strong>main</strong>.fish object at 0x00000248EE072F88&gt; &lt;<strong>main</strong>.fish object at 0x00000248EE072F88&gt;<br>True  </p>
 </blockquote>
 <p>如果没装饰器，那个True就变成False了。说明内存储存位置不一样了，它就不是单例模式了。</p>
-<pre><code class="python"><span class="function"><span class="keyword">def</span> <span class="title">singleton</span><span class="params">(cls)</span>:</span>
-    instance = {}
-    <span class="function"><span class="keyword">def</span> <span class="title">wrapper</span><span class="params">(*args, **kwargs)</span>:</span>
-        <span class="keyword">if</span> cls <span class="keyword">not</span> <span class="keyword">in</span> instance:
-            instance[cls] = cls(*args, **kwargs)
-        <span class="keyword">return</span> instance[cls]
-    <span class="keyword">return</span> wrapper
-
-<span class="meta">@singleton</span>
-<span class="class"><span class="keyword">class</span> <span class="title">fish</span><span class="params">(object)</span>:</span>
-    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, id)</span>:</span>
-        self.id = id
-
-    <span class="function"><span class="keyword">def</span> <span class="title">perch</span><span class="params">(self, cooking, price)</span>:</span>
-        cooking = str(self.id) + cooking
-        <span class="keyword">return</span> cooking, price
-
-cls1 = fish(<span class="number">123</span>)
-cls2 = fish(<span class="number">456</span>)
-print(cls1, cls2)
-print(id(cls1) == id(cls2))</code></pre>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">singleton</span><span class="params">(cls)</span>:</span></span><br><span class="line">    instance = &#123;&#125;</span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">wrapper</span><span class="params">(*args, **kwargs)</span>:</span></span><br><span class="line">        <span class="keyword">if</span> cls <span class="keyword">not</span> <span class="keyword">in</span> instance:</span><br><span class="line">            instance[cls] = cls(*args, **kwargs)</span><br><span class="line">        <span class="keyword">return</span> instance[cls]</span><br><span class="line">    <span class="keyword">return</span> wrapper</span><br><span class="line"></span><br><span class="line"><span class="meta">@singleton</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">fish</span><span class="params">(object)</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, id)</span>:</span></span><br><span class="line">        self.id = id</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">perch</span><span class="params">(self, cooking, price)</span>:</span></span><br><span class="line">        cooking = str(self.id) + cooking</span><br><span class="line">        <span class="keyword">return</span> cooking, price</span><br><span class="line"></span><br><span class="line">cls1 = fish(<span class="number">123</span>)</span><br><span class="line">cls2 = fish(<span class="number">456</span>)</span><br><span class="line">print(cls1, cls2)</span><br><span class="line">print(id(cls1) == id(cls2))</span><br></pre></td></tr></table></figure>
 <p>自然还得有个用类来写的单例模式。醍醐味！用法是一样的，就不重复了，结果也是一样的。  </p>
-<pre><code class="python"><span class="class"><span class="keyword">class</span> <span class="title">singleton</span><span class="params">(object)</span>:</span>
-    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, cls)</span>:</span>
-        self.cls = cls
-        self.instance = {}
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">singleton</span><span class="params">(object)</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, cls)</span>:</span></span><br><span class="line">        self.cls = cls</span><br><span class="line">        self.instance = &#123;&#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__call__</span><span class="params">(self, *args, **kwargs)</span>:</span></span><br><span class="line">        <span class="keyword">if</span> self.cls <span class="keyword">not</span> <span class="keyword">in</span> self.instance:</span><br><span class="line">            self.instance[self.cls] = self.cls(*args, **kwargs)</span><br><span class="line">        <span class="keyword">return</span> self.instance[self.cls]</span><br></pre></td></tr></table></figure>
 
-    <span class="function"><span class="keyword">def</span> <span class="title">__call__</span><span class="params">(self, *args, **kwargs)</span>:</span>
-        <span class="keyword">if</span> self.cls <span class="keyword">not</span> <span class="keyword">in</span> self.instance:
-            self.instance[self.cls] = self.cls(*args, **kwargs)
-        <span class="keyword">return</span> self.instance[self.cls]</code></pre>
 <h2 id="统计函数使用时间"><a href="#统计函数使用时间" class="headerlink" title="统计函数使用时间"></a>统计函数使用时间</h2><p>这里要注意的是不能用time.process_time()，要用time.time()。原因是</p>
 <ul>
 <li>它返回当前进程的系统和用户CPU时间总和的值（以小数秒为单位）作为浮点数，但是在装饰器中，无法进行计算。</li>
 <li>代码中如果存在sleep()，那么process_time()将不能把该时间计算在内。</li>
 </ul>
-<pre><code class="python"><span class="keyword">import</span> time
-
-<span class="class"><span class="keyword">class</span> <span class="title">timekit</span><span class="params">(object)</span>:</span>
-    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, func)</span>:</span>
-        self.func = func
-
-    <span class="function"><span class="keyword">def</span> <span class="title">__get__</span><span class="params">(self, instance, owner)</span>:</span>
-        self.instance = instance
-        <span class="keyword">return</span> self
-
-    <span class="function"><span class="keyword">def</span> <span class="title">__call__</span><span class="params">(self, *args, **kwargs)</span>:</span>
-        start = time.time()
-        r = self.func(self.instance, *args, **kwargs)
-        end = time.time()
-        print(end - start)
-        <span class="keyword">return</span> r
-
-<span class="class"><span class="keyword">class</span> <span class="title">fish</span><span class="params">(object)</span>:</span>
-    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, id)</span>:</span>
-        self.id = id
-
-<span class="meta">    @timekit</span>
-    <span class="function"><span class="keyword">def</span> <span class="title">perch</span><span class="params">(self, name)</span>:</span>
-        result = name + str(self.id)
-        time.sleep(<span class="number">3</span>)
-        <span class="keyword">return</span> result
-
-print(fish(<span class="number">123</span>).perch(<span class="string">'hh'</span>))</code></pre>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> time</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">timekit</span><span class="params">(object)</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, func)</span>:</span></span><br><span class="line">        self.func = func</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__get__</span><span class="params">(self, instance, owner)</span>:</span></span><br><span class="line">        self.instance = instance</span><br><span class="line">        <span class="keyword">return</span> self</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__call__</span><span class="params">(self, *args, **kwargs)</span>:</span></span><br><span class="line">        start = time.time()</span><br><span class="line">        r = self.func(self.instance, *args, **kwargs)</span><br><span class="line">        end = time.time()</span><br><span class="line">        print(end - start)</span><br><span class="line">        <span class="keyword">return</span> r</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">fish</span><span class="params">(object)</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, id)</span>:</span></span><br><span class="line">        self.id = id</span><br><span class="line"></span><br><span class="line"><span class="meta">    @timekit</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">perch</span><span class="params">(self, name)</span>:</span></span><br><span class="line">        result = name + str(self.id)</span><br><span class="line">        time.sleep(<span class="number">3</span>)</span><br><span class="line">        <span class="keyword">return</span> result</span><br><span class="line"></span><br><span class="line">print(fish(<span class="number">123</span>).perch(<span class="string">'hh'</span>))</span><br></pre></td></tr></table></figure>
 <p>还有一种就是函数写法：  </p>
-<pre><code class="python"><span class="function"><span class="keyword">def</span> <span class="title">timekit</span><span class="params">(func)</span>:</span>
-    <span class="function"><span class="keyword">def</span> <span class="title">wrapper</span><span class="params">(*args, **kwargs)</span>:</span>
-        start = time.time()
-        r = func(*args, **kwargs)
-        end = time.time()
-        print(end - start)
-        <span class="keyword">return</span> r
-    <span class="keyword">return</span> wrapper</code></pre>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">timekit</span><span class="params">(func)</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">wrapper</span><span class="params">(*args, **kwargs)</span>:</span></span><br><span class="line">        start = time.time()</span><br><span class="line">        r = func(*args, **kwargs)</span><br><span class="line">        end = time.time()</span><br><span class="line">        print(end - start)</span><br><span class="line">        <span class="keyword">return</span> r</span><br><span class="line">    <span class="keyword">return</span> wrapper</span><br></pre></td></tr></table></figure>
 <p>装饰器还可以用来捕捉异常和隐藏异常。</p>
-<pre><code class="python"><span class="class"><span class="keyword">class</span> <span class="title">Error</span><span class="params">(object)</span>:</span>
-    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, func)</span>:</span> 
-        self.func = func
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Error</span><span class="params">(object)</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, func)</span>:</span> </span><br><span class="line">        self.func = func</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__get__</span><span class="params">(self, instance, owner)</span>:</span></span><br><span class="line">        self.instance_ = instance</span><br><span class="line">        <span class="keyword">return</span> self</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__call__</span><span class="params">(self, *args, **kwargs)</span>:</span></span><br><span class="line">        <span class="keyword">try</span>:</span><br><span class="line">            <span class="keyword">return</span> self.func(self.instance_, *args, **kwargs) </span><br><span class="line">        <span class="keyword">except</span> Exception <span class="keyword">as</span> e:</span><br><span class="line">            <span class="comment"># 捕捉异常       </span></span><br><span class="line">            print(<span class="string">'Error: '</span>, e)</span><br><span class="line">            traceback.print_exc()</span><br><span class="line">            <span class="comment"># 忽略异常</span></span><br><span class="line">            <span class="comment"># pass</span></span><br></pre></td></tr></table></figure>
 
-    <span class="function"><span class="keyword">def</span> <span class="title">__get__</span><span class="params">(self, instance, owner)</span>:</span>
-        self.instance_ = instance
-        <span class="keyword">return</span> self
-
-    <span class="function"><span class="keyword">def</span> <span class="title">__call__</span><span class="params">(self, *args, **kwargs)</span>:</span>
-        <span class="keyword">try</span>:
-            <span class="keyword">return</span> self.func(self.instance_, *args, **kwargs) 
-        <span class="keyword">except</span> Exception <span class="keyword">as</span> e:
-            <span class="comment"># 捕捉异常       </span>
-            print(<span class="string">'Error: '</span>, e)
-            traceback.print_exc()
-            <span class="comment"># 忽略异常</span>
-            <span class="comment"># pass</span></code></pre>
 <h1 id="装饰器模式"><a href="#装饰器模式" class="headerlink" title="装饰器模式"></a>装饰器模式</h1><p>装饰器模式其实是设计模式里的一种，大体思路就是给对象增加行为。一般分继承和关联两类，而关联地增加行为就是装饰器模式。  </p>
 <p>就比方说，做披萨，有的人要厚饼披萨，有的人要薄饼披萨。有的人要加芝士，有的人要加洋葱，有的人要加香肠。那么，如果每一个种披萨都写一个类，就有3<em>2+3</em>2+1*2 = 14个类。  </p>
 <p>用装饰器模式写出来大概是这个感觉：  </p>
-<pre><code class="python"><span class="class"><span class="keyword">class</span> <span class="title">Pizza</span><span class="params">(object)</span>:</span>
-    <span class="function"><span class="keyword">def</span> <span class="title">get_price</span><span class="params">(self)</span>:</span>
-        <span class="keyword">pass</span>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Pizza</span><span class="params">(object)</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">get_price</span><span class="params">(self)</span>:</span></span><br><span class="line">        <span class="keyword">pass</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">get_name</span><span class="params">(self)</span>:</span></span><br><span class="line">        <span class="keyword">pass</span></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Thick</span><span class="params">(Pizza)</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self)</span>:</span></span><br><span class="line">        self.name = <span class="string">'Thick'</span></span><br><span class="line">        self.price = <span class="number">15</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">get_price</span><span class="params">(self)</span>:</span></span><br><span class="line">        <span class="keyword">return</span> self.price</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">get_name</span><span class="params">(self)</span>:</span></span><br><span class="line">        <span class="keyword">return</span> self.name</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Thin</span><span class="params">(Pizza)</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self)</span>:</span></span><br><span class="line">        self.name = <span class="string">'Thin'</span></span><br><span class="line">        self.price = <span class="number">10</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">get_price</span><span class="params">(self)</span>:</span></span><br><span class="line">        <span class="keyword">return</span> self.price</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">get_name</span><span class="params">(self)</span>:</span></span><br><span class="line">        <span class="keyword">return</span> self.name</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Ingredient</span><span class="params">(Pizza)</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, pizza)</span>:</span></span><br><span class="line">        self.pizza = pizza</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">get_price</span><span class="params">(self)</span>:</span></span><br><span class="line">        <span class="keyword">pass</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">get_name</span><span class="params">(self)</span>:</span></span><br><span class="line">        <span class="keyword">pass</span></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Cheese</span><span class="params">(Ingredient)</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">get_name</span><span class="params">(self)</span>:</span></span><br><span class="line">        <span class="keyword">return</span> self.pizza.get_name() + self.add_name()</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">get_price</span><span class="params">(self)</span>:</span></span><br><span class="line">        <span class="keyword">return</span> self.pizza.get_price() + self.add_price()</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">add_name</span><span class="params">(self)</span>:</span></span><br><span class="line">        <span class="keyword">return</span> <span class="string">' + cheese'</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">add_price</span><span class="params">(self)</span>:</span></span><br><span class="line">        <span class="keyword">return</span> <span class="number">0.3</span></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Mushroom</span><span class="params">(Ingredient)</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">get_name</span><span class="params">(self)</span>:</span></span><br><span class="line">        <span class="keyword">return</span> self.pizza.get_name() + self.add_name()</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">get_price</span><span class="params">(self)</span>:</span></span><br><span class="line">        <span class="keyword">return</span> self.pizza.get_price() + self.add_price()</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">add_name</span><span class="params">(self)</span>:</span></span><br><span class="line">        <span class="keyword">return</span> <span class="string">' + mushroom'</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">add_price</span><span class="params">(self)</span>:</span></span><br><span class="line">        <span class="keyword">return</span> <span class="number">0.2</span></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Onion</span><span class="params">(Ingredient)</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">get_name</span><span class="params">(self)</span>:</span></span><br><span class="line">        <span class="keyword">return</span> self.pizza.get_name() + self.add_name()</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">get_price</span><span class="params">(self)</span>:</span></span><br><span class="line">        <span class="keyword">return</span> self.pizza.get_price() + self.add_price()</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">add_name</span><span class="params">(self)</span>:</span></span><br><span class="line">        <span class="keyword">return</span> <span class="string">' + onion'</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">add_price</span><span class="params">(self)</span>:</span></span><br><span class="line">        <span class="keyword">return</span> <span class="number">0.2</span></span><br><span class="line"></span><br><span class="line">thick_onion = Onion(Thick())</span><br><span class="line">print(thick_onion.get_name(), </span><br><span class="line">thick_onion.get_price())</span><br></pre></td></tr></table></figure>
 
-    <span class="function"><span class="keyword">def</span> <span class="title">get_name</span><span class="params">(self)</span>:</span>
-        <span class="keyword">pass</span>
-
-<span class="class"><span class="keyword">class</span> <span class="title">Thick</span><span class="params">(Pizza)</span>:</span>
-    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self)</span>:</span>
-        self.name = <span class="string">'Thick'</span>
-        self.price = <span class="number">15</span>
-
-    <span class="function"><span class="keyword">def</span> <span class="title">get_price</span><span class="params">(self)</span>:</span>
-        <span class="keyword">return</span> self.price
-
-    <span class="function"><span class="keyword">def</span> <span class="title">get_name</span><span class="params">(self)</span>:</span>
-        <span class="keyword">return</span> self.name
-
-<span class="class"><span class="keyword">class</span> <span class="title">Thin</span><span class="params">(Pizza)</span>:</span>
-    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self)</span>:</span>
-        self.name = <span class="string">'Thin'</span>
-        self.price = <span class="number">10</span>
-
-    <span class="function"><span class="keyword">def</span> <span class="title">get_price</span><span class="params">(self)</span>:</span>
-        <span class="keyword">return</span> self.price
-
-    <span class="function"><span class="keyword">def</span> <span class="title">get_name</span><span class="params">(self)</span>:</span>
-        <span class="keyword">return</span> self.name
-
-<span class="class"><span class="keyword">class</span> <span class="title">Ingredient</span><span class="params">(Pizza)</span>:</span>
-    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, pizza)</span>:</span>
-        self.pizza = pizza
-
-    <span class="function"><span class="keyword">def</span> <span class="title">get_price</span><span class="params">(self)</span>:</span>
-        <span class="keyword">pass</span>
-
-    <span class="function"><span class="keyword">def</span> <span class="title">get_name</span><span class="params">(self)</span>:</span>
-        <span class="keyword">pass</span>
-
-<span class="class"><span class="keyword">class</span> <span class="title">Cheese</span><span class="params">(Ingredient)</span>:</span>
-    <span class="function"><span class="keyword">def</span> <span class="title">get_name</span><span class="params">(self)</span>:</span>
-        <span class="keyword">return</span> self.pizza.get_name() + self.add_name()
-
-    <span class="function"><span class="keyword">def</span> <span class="title">get_price</span><span class="params">(self)</span>:</span>
-        <span class="keyword">return</span> self.pizza.get_price() + self.add_price()
-
-    <span class="function"><span class="keyword">def</span> <span class="title">add_name</span><span class="params">(self)</span>:</span>
-        <span class="keyword">return</span> <span class="string">' + cheese'</span>
-
-    <span class="function"><span class="keyword">def</span> <span class="title">add_price</span><span class="params">(self)</span>:</span>
-        <span class="keyword">return</span> <span class="number">0.3</span>
-
-<span class="class"><span class="keyword">class</span> <span class="title">Mushroom</span><span class="params">(Ingredient)</span>:</span>
-    <span class="function"><span class="keyword">def</span> <span class="title">get_name</span><span class="params">(self)</span>:</span>
-        <span class="keyword">return</span> self.pizza.get_name() + self.add_name()
-
-    <span class="function"><span class="keyword">def</span> <span class="title">get_price</span><span class="params">(self)</span>:</span>
-        <span class="keyword">return</span> self.pizza.get_price() + self.add_price()
-
-    <span class="function"><span class="keyword">def</span> <span class="title">add_name</span><span class="params">(self)</span>:</span>
-        <span class="keyword">return</span> <span class="string">' + mushroom'</span>
-
-    <span class="function"><span class="keyword">def</span> <span class="title">add_price</span><span class="params">(self)</span>:</span>
-        <span class="keyword">return</span> <span class="number">0.2</span>
-
-<span class="class"><span class="keyword">class</span> <span class="title">Orion</span><span class="params">(Ingredient)</span>:</span>
-    <span class="function"><span class="keyword">def</span> <span class="title">get_name</span><span class="params">(self)</span>:</span>
-        <span class="keyword">return</span> self.pizza.get_name() + self.add_name()
-
-    <span class="function"><span class="keyword">def</span> <span class="title">get_price</span><span class="params">(self)</span>:</span>
-        <span class="keyword">return</span> self.pizza.get_price() + self.add_price()
-
-    <span class="function"><span class="keyword">def</span> <span class="title">add_name</span><span class="params">(self)</span>:</span>
-        <span class="keyword">return</span> <span class="string">' + orion'</span>
-
-    <span class="function"><span class="keyword">def</span> <span class="title">add_price</span><span class="params">(self)</span>:</span>
-        <span class="keyword">return</span> <span class="number">0.2</span>
-
-thick_orion = Orion(Thick())
-print(thick_orion.get_name(), 
-thick_orion.get_price())</code></pre>
 <blockquote>
 <p>以下情况适合使用装饰器模式：  </p>
 <ul>
@@ -516,7 +361,7 @@ thick_orion.get_price())</code></pre>
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#类装饰器"><span class="nav-number">1.</span> <span class="nav-text">类装饰器</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#几个例子"><span class="nav-number">2.</span> <span class="nav-text">几个例子#</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#单例模式"><span class="nav-number">2.1.</span> <span class="nav-text">单例模式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#统计函数使用时间"><span class="nav-number">2.2.</span> <span class="nav-text">统计函数使用时间</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#装饰器模式"><span class="nav-number">3.</span> <span class="nav-text">装饰器模式</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#参考文献"><span class="nav-number">4.</span> <span class="nav-text">参考文献</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#类装饰器"><span class="nav-number">1.</span> <span class="nav-text">类装饰器</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#几个例子"><span class="nav-number">2.</span> <span class="nav-text">几个例子</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#单例模式"><span class="nav-number">2.1.</span> <span class="nav-text">单例模式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#统计函数使用时间"><span class="nav-number">2.2.</span> <span class="nav-text">统计函数使用时间</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#装饰器模式"><span class="nav-number">3.</span> <span class="nav-text">装饰器模式</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#参考文献"><span class="nav-number">4.</span> <span class="nav-text">参考文献</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -532,7 +377,7 @@ thick_orion.get_price())</code></pre>
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">19</span>
+          <span class="site-state-item-count">20</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -552,6 +397,17 @@ thick_orion.get_price())</code></pre>
 </div>
 
 
+  <div class="links-of-blogroll motion-element">
+    <div class="links-of-blogroll-title">
+      <i class="fa fa-fw fa-link"></i>
+      Links
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <a href="https://blog.sayuri.moe/" title="https:&#x2F;&#x2F;blog.sayuri.moe&#x2F;" rel="noopener" target="_blank">小百合的算术教室</a>
+        </li>
+    </ul>
+  </div>
 
       </div>
 

@@ -67,7 +67,7 @@
 <meta property="og:image" content="https:&#x2F;&#x2F;notsquirrel.com&#x2F;assets&#x2F;img&#x2F;pca&#x2F;3d_vectors.png">
 <meta property="og:image" content="https:&#x2F;&#x2F;notsquirrel.com&#x2F;assets&#x2F;img&#x2F;pca&#x2F;3d_vectors2.png">
 <meta property="og:image" content="https:&#x2F;&#x2F;notsquirrel.com&#x2F;assets&#x2F;img&#x2F;pca&#x2F;eigen_projections.png">
-<meta property="og:updated_time" content="2020-01-20T16:36:00.350Z">
+<meta property="og:updated_time" content="2020-02-21T10:22:53.787Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https:&#x2F;&#x2F;notsquirrel.com&#x2F;assets&#x2F;img&#x2F;pca&#x2F;flatten.gif">
 
@@ -231,7 +231,7 @@
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2020-01-21 00:36:00" itemprop="dateModified" datetime="2020-01-21T00:36:00+08:00">2020-01-21</time>
+                <time title="Modified: 2020-02-21 18:22:53" itemprop="dateModified" datetime="2020-02-21T18:22:53+08:00">2020-02-21</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -398,47 +398,7 @@ tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}
 </ul>
 <p>一旦我们得到了$U$，我们就可以简单地拿到我们想要数目的特征向量了。（我们通常拿前$n$个最大特征值对应的特征向量。）而后我们“使用”（点乘）$X$来获得<strong>通过我们降维后的$U$而得来的$X$在新的子空间上的投射</strong>（我们将它在下面的代码中称之为W。）  </p>
 <p>将这个应用在Python中实际上非常简单——这里就有一个你应该可以操作的例子。接下来的例子是假设你的数据已经被预处理成了零基的。获取更好的解释请参考<a href="http://cs231n.github.io/neural-networks-2/#datapre" target="_blank" rel="noopener">http://cs231n.github.io/neural-networks-2/#datapre.</a>  </p>
-<pre><code class="python"><span class="class"><span class="keyword">class</span> <span class="title">Pca</span>:</span>
-    <span class="string">'''</span>
-<span class="string">    A simple class to run PCA and store the truncated U matrix for use on the test set.</span>
-<span class="string">    '''</span>
-
-    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self)</span>:</span>
-        self.W = <span class="literal">None</span>
-
-    <span class="function"><span class="keyword">def</span> <span class="title">pca_train</span><span class="params">(self, X, n=<span class="number">5</span>)</span>:</span>
-        <span class="string">'''</span>
-<span class="string">        Helper function to perform PCA on X and store the chosen eigenvectors from U.</span>
-<span class="string"></span>
-<span class="string">        If input X is T x d,</span>
-<span class="string"></span>
-<span class="string">        transformed X' is T x d'</span>
-<span class="string"></span>
-<span class="string">        Also saves the chosen columns of U to self.W.</span>
-<span class="string"></span>
-<span class="string">        Based heavily on http://cs231n.github.io/neural-networks-2/.</span>
-<span class="string">        '''</span>
-
-        <span class="comment"># PCA down to top n eigenvectors</span>
-        <span class="comment"># Assume input data matrix X of size [T x d]</span>
-        cov = np.dot(X.T, X) / X.shape[<span class="number">0</span>] <span class="comment"># get the data covariance matrix</span>
-        U,S,V = np.linalg.svd(cov)
-
-        <span class="comment"># eigenvectors are returned sorted by eigenvalue; get top n</span>
-        X_prime = np.dot(X, U[:,:n]) 
-
-        <span class="comment"># save W = U[:,:n] for use again in testing; we only train</span>
-        <span class="comment"># PCA on the TRAIN SET to prevent data leakage!</span>
-        self.W = U[:,:n]
-
-        <span class="keyword">return</span> X_prime
-
-    <span class="function"><span class="keyword">def</span> <span class="title">pca_transform</span><span class="params">(self, X)</span>:</span>
-        <span class="string">'''</span>
-<span class="string">        Use the previously trained U to transform an input X (i.e. test data)</span>
-<span class="string">        '''</span>
-        <span class="keyword">assert</span> self.W <span class="keyword">is</span> <span class="keyword">not</span> <span class="literal">None</span>, <span class="string">"pca_test() called when self.W is None. Did you call pca_train() first?"</span>
-        <span class="keyword">return</span> np.dot(X, self.W)</code></pre>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Pca</span>:</span></span><br><span class="line">    <span class="string">'''</span></span><br><span class="line"><span class="string">    A simple class to run PCA and store the truncated U matrix for use on the test set.</span></span><br><span class="line"><span class="string">    '''</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self)</span>:</span></span><br><span class="line">        self.W = <span class="literal">None</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">pca_train</span><span class="params">(self, X, n=<span class="number">5</span>)</span>:</span></span><br><span class="line">        <span class="string">'''</span></span><br><span class="line"><span class="string">        Helper function to perform PCA on X and store the chosen eigenvectors from U.</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">        If input X is T x d,</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">        transformed X' is T x d'</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">        Also saves the chosen columns of U to self.W.</span></span><br><span class="line"><span class="string">        </span></span><br><span class="line"><span class="string">        Based heavily on http://cs231n.github.io/neural-networks-2/.</span></span><br><span class="line"><span class="string">        '''</span></span><br><span class="line"></span><br><span class="line">        <span class="comment"># PCA down to top n eigenvectors</span></span><br><span class="line">        <span class="comment"># Assume input data matrix X of size [T x d]</span></span><br><span class="line">        cov = np.dot(X.T, X) / X.shape[<span class="number">0</span>] <span class="comment"># get the data covariance matrix</span></span><br><span class="line">        U,S,V = np.linalg.svd(cov)</span><br><span class="line"></span><br><span class="line">        <span class="comment"># eigenvectors are returned sorted by eigenvalue; get top n</span></span><br><span class="line">        X_prime = np.dot(X, U[:,:n]) </span><br><span class="line">        </span><br><span class="line">        <span class="comment"># save W = U[:,:n] for use again in testing; we only train</span></span><br><span class="line">        <span class="comment"># PCA on the TRAIN SET to prevent data leakage!</span></span><br><span class="line">        self.W = U[:,:n]</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> X_prime</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">pca_transform</span><span class="params">(self, X)</span>:</span></span><br><span class="line">        <span class="string">'''</span></span><br><span class="line"><span class="string">        Use the previously trained U to transform an input X (i.e. test data)</span></span><br><span class="line"><span class="string">        '''</span></span><br><span class="line">        <span class="keyword">assert</span> self.W <span class="keyword">is</span> <span class="keyword">not</span> <span class="literal">None</span>, <span class="string">"pca_test() called when self.W is None. Did you call pca_train() first?"</span></span><br><span class="line">        <span class="keyword">return</span> np.dot(X, self.W)</span><br></pre></td></tr></table></figure>
 <ol>
 <li>通常情况下，0代表的是黑色，255代表的是白色。为了简化，我们在博客中改变了这个传统来使得博文看上去简单：在博文中1是纯黑色的像素。<a href="#0-1">点我看文中的描述</a>  </li>
 <li>注意——用这个加粗的$\textbf{X}$的记号代表一组$X$数据点是十分常见的，但是这当然不标准。机器学习的文献记号到处都是多种多样，务必仔细阅读。<a href="#2">点我看文中的描述</a>  </li>
@@ -526,7 +486,7 @@ tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">19</span>
+          <span class="site-state-item-count">20</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -546,6 +506,17 @@ tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}
 </div>
 
 
+  <div class="links-of-blogroll motion-element">
+    <div class="links-of-blogroll-title">
+      <i class="fa fa-fw fa-link"></i>
+      Links
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <a href="https://blog.sayuri.moe/" title="https:&#x2F;&#x2F;blog.sayuri.moe&#x2F;" rel="noopener" target="_blank">小百合的算术教室</a>
+        </li>
+    </ul>
+  </div>
 
       </div>
 

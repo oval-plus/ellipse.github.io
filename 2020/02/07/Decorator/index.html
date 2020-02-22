@@ -58,7 +58,7 @@
 <meta property="og:site_name" content="Plus of Oval">
 <meta property="og:description" content="学了个装饰器，还顺便学了描述器。赶紧记一下，免得以后还得重头debug。装饰器是设计模式的一种，但是在Python里有个专门的语法糖，效果和设计模式里的装饰器模式差不太多，但是写起来门道还挺多的。">
 <meta property="og:locale" content="en">
-<meta property="og:updated_time" content="2020-02-17T18:26:24.894Z">
+<meta property="og:updated_time" content="2020-02-21T15:32:57.181Z">
 <meta name="twitter:card" content="summary">
 
 <link rel="canonical" href="http://yoursite.com/2020/02/07/Decorator/">
@@ -221,7 +221,7 @@
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2020-02-18 02:26:24" itemprop="dateModified" datetime="2020-02-18T02:26:24+08:00">2020-02-18</time>
+                <time title="Modified: 2020-02-21 23:32:57" itemprop="dateModified" datetime="2020-02-21T23:32:57+08:00">2020-02-21</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -431,7 +431,8 @@ print(fish(<span class="number">123</span>).perch(<span class="string">'hh'</spa
         cooking = str(self.id) + cooking
         <span class="keyword">return</span> cooking, price
 
-print(fish(<span class="number">123</span>).perch(<span class="string">'steamed'</span>, <span class="number">50</span>))</code></pre>
+print(fish(<span class="number">123</span>).perch(<span class="string">'steamed'</span>, <span class="number">50</span>))
+<span class="comment"># ('123steamedgarlic', 51)</span></code></pre>
 <p>当然也是有描述器式的编写模式的，但是，如果仅靠自己硬写，不依赖任何库的话，反而使代码变得繁琐。原因在于在获得了实例的self后，在调用装饰器的模块时，也就是<code>def __call__(self, func, *args, **kwargs):</code>中依然没办法调取实例的self。所以怎么办呢？聪明的程序员们想出了object_proxy，也就是套娃装饰器：<br>先套一层object_proxy，把被装饰函数(wrapped)的名称与self扒下来，然后创建一个object_proxy子类(bound_function_wrapper)，获得object_proxy的一切属性，并且新建一个装饰器本体函数作为属性（也就是wrapper，换句话说就是你想让装饰器实现的功能）。然后再新建一个继承了object_proxy的子类(function_wrapper)，去获得上一个子类的所有东西，并输出你想要的wrapper。非常复杂，而且为了考虑wrapped的多种情况与wrapper的相合度，指不定您还得再写个装饰器去搞定function_wrapper…  </p>
 <p>所以啊…有一个库……叫做wrapt，很爽，可以爽爽。但是具体怎么爽我还没搞懂，而且这篇博客也有点太长了，类装饰器和装饰器模式之类的，下次再写吧。</p>
 <h1 id="参考文献"><a href="#参考文献" class="headerlink" title="参考文献"></a>参考文献</h1><p>一个讲座，我没太看明白：<a href="https://www.youtube.com/watch?v=W7Rv-km3ZuA" target="_blank" rel="noopener">Advanced methods for creating decorators</a>这几天想办法看看明白然后再水一篇博客吧。<br>一个超级酷炫的blog，主讲人写的：<a href="https://github.com/GrahamDumpleton/wrapt" target="_blank" rel="noopener">wrapt</a><br>cookbook它不香吗？<a href="https://python3-cookbook.readthedocs.io/zh_CN/latest/c09/p09_define_decorators_as_classes.html" target="_blank" rel="noopener">Python3 Cookbook</a></p>
@@ -520,7 +521,7 @@ print(fish(<span class="number">123</span>).perch(<span class="string">'steamed'
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">19</span>
+          <span class="site-state-item-count">20</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -540,6 +541,17 @@ print(fish(<span class="number">123</span>).perch(<span class="string">'steamed'
 </div>
 
 
+  <div class="links-of-blogroll motion-element">
+    <div class="links-of-blogroll-title">
+      <i class="fa fa-fw fa-link"></i>
+      Links
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <a href="https://blog.sayuri.moe/" title="https:&#x2F;&#x2F;blog.sayuri.moe&#x2F;" rel="noopener" target="_blank">小百合的算术教室</a>
+        </li>
+    </ul>
+  </div>
 
       </div>
 
