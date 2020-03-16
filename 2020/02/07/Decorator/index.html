@@ -58,7 +58,7 @@
 <meta property="og:site_name" content="Plus of Oval">
 <meta property="og:description" content="学了个装饰器，还顺便学了描述器。赶紧记一下，免得以后还得重头debug。装饰器是设计模式的一种，但是在Python里有个专门的语法糖，效果和设计模式里的装饰器模式差不太多，但是写起来门道还挺多的。">
 <meta property="og:locale" content="en">
-<meta property="og:updated_time" content="2020-02-21T15:32:57.181Z">
+<meta property="og:updated_time" content="2020-03-08T10:05:28.428Z">
 <meta name="twitter:card" content="summary">
 
 <link rel="canonical" href="http://yoursite.com/2020/02/07/Decorator/">
@@ -221,7 +221,7 @@
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2020-02-21 23:32:57" itemprop="dateModified" datetime="2020-02-21T23:32:57+08:00">2020-02-21</time>
+                <time title="Modified: 2020-03-08 18:05:28" itemprop="dateModified" datetime="2020-03-08T18:05:28+08:00">2020-03-08</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -262,59 +262,8 @@
 <p>大概就是这个意思，在不修改原来对象的代码的基础上，动态地修改原来对象的某些功能。</p>
 <p>装饰器的用法也不是很难，可以用函数定义装饰器，也可以用类定义装饰器。同样，装饰器既可以装饰类，也可以装饰函数。这都没什么问题。  </p>
 <p>总之先写一个简单的装饰器吧，要实现的功能是在茶的价格上加上冰的价格, 冰的价格是0.5。如果茶的价格是x，那么茶+冰的价格就应该是x+0.5。</p>
-<pre><code class="python"><span class="function"><span class="keyword">def</span> <span class="title">ice</span><span class="params">(fn)</span>:</span>
-    <span class="function"><span class="keyword">def</span> <span class="title">wraps</span><span class="params">(*args)</span>:</span>
-        new_price = fn(*args) + <span class="number">0.5</span>
-        <span class="keyword">return</span> new_price
-    <span class="keyword">return</span> wraps
-
-<span class="meta">@ice</span>
-<span class="function"><span class="keyword">def</span> <span class="title">tea</span><span class="params">(price)</span>:</span>
-    <span class="keyword">return</span> price
-
-print(tea(<span class="number">15</span>))</code></pre>
-<p>这就说明，装饰器是ice，传入的是fn，而传出的就变成wraps函数啦。  </p>
-<p>这个装饰器比较简单的原因是，装饰器本身没参数，而且也是函数装饰函数，要考虑的东西比较少。嘛，也是有可以写的很妙的装饰器的，下面这个就是个例子。这个例子里出现了functools.wraps，后面会讲一下。</p>
-<h2 id="装饰器版斐波那契数列："><a href="#装饰器版斐波那契数列：" class="headerlink" title="装饰器版斐波那契数列："></a>装饰器版斐波那契数列：</h2><pre><code class="python"><span class="keyword">from</span> functools <span class="keyword">import</span> wraps
-<span class="function"><span class="keyword">def</span> <span class="title">decorator</span><span class="params">(fn)</span>:</span>
-    queue = {} 
-    <span class="comment"># 创建空字典。将第x个数作为键，将处在那个位置的斐波那契数作为对应键的字典值。</span>
-    miss = object() <span class="comment"># 对象</span>
-
-<span class="meta">    @wraps(fn) # wraps装饰器</span>
-    <span class="function"><span class="keyword">def</span> <span class="title">wrapper</span><span class="params">(*args)</span>:</span> <span class="comment"># decorator装饰器本体</span>
-        result = queue.get(fn(*args), miss) 
-        <span class="keyword">if</span> result <span class="keyword">is</span> miss: 
-            <span class="comment"># 如果在空字典中第x个数为键的对应值不存在，那么</span>
-            queue[*args] = fn(*args) <span class="comment"># 运行函数</span>
-            result = queue[*args]
-        <span class="keyword">return</span> result <span class="comment"># 给出答案</span>
-
-<span class="function"><span class="keyword">def</span> <span class="title">fib</span><span class="params">(n)</span>:</span>
-    <span class="string">'''计算斐波那契数列，n是需要算出的第n+1个斐波那契数，因为第0个是斐波那契数列中的第1个数'''</span>
-    <span class="keyword">if</span> n &lt; <span class="number">2</span>: <span class="comment"># 算fib(0), fib(1)的结果</span>
-        <span class="keyword">return</span> fib(n)
-    <span class="keyword">return</span> fib(n - <span class="number">1</span>) + fib(n - <span class="number">2</span>)</code></pre>
-<h2 id="functools-wraps"><a href="#functools-wraps" class="headerlink" title="functools.wraps"></a>functools.wraps</h2><p>其实functools.wraps的内容看源码就足够了，这里有个知乎专栏可以辅助阅读：<a href="https://zhuanlan.zhihu.com/p/45535784" target="_blank" rel="noopener">Python functools.wraps 深入理解</a><br>简单概括一下就是：  </p>
-<blockquote>
-<ul>
-<li>wraps函数在传入后，会以partial对象传出。  </li>
-<li>而partial会生成一个新可调用对象（这里的名字是wrapper），执行这个可调用对象时，会执行被包装函数（在这里是fib函数）的功能，参数则是装饰器的参数+被包装函数的原来的参数。  </li>
-<li>将被包装函数的属性拷贝给wrapper时，使用的函数名是update_wrapper，也就是partial的第一个参数。  </li>
-</ul>
-</blockquote>
-<p>所以流程就是：</p>
-<blockquote>
-<ul>
-<li>一个fib函数</li>
-<li>执行decorator装饰器</li>
-<li>创建字典blabla</li>
-<li>将被包装函数(fib)传入wraps装饰器内，经过了partial内部的update_wrapper函数处理，将fib的属性拷贝到了装饰器内的函数，即wrapper上。</li>
-<li>把fib函数指向wrapper函数</li>
-<li>这样调用fib函数时，其实就是在调用经过partial处理的wrapper函数了。  </li>
-</ul>
-</blockquote>
-<p>说来说去，最关键的还是：<br><strong>functools.wraps 旨在消除装饰器对原函数造成的影响，即对原函数的相关属性进行拷贝，已达到装饰器不修改原函数的目的。</strong><br>放在这个例子就是这一步：<code>queue[*args] = fn(*args)</code>  </p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">ice</span><span class="params">(fn)</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">wraps</span><span class="params">(*args)</span>:</span></span><br><span class="line">        new_price = fn(*args) + <span class="number">0.5</span></span><br><span class="line">        <span class="keyword">return</span> new_price</span><br><span class="line">    <span class="keyword">return</span> wraps</span><br><span class="line"></span><br><span class="line"><span class="meta">@ice</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">tea</span><span class="params">(price)</span>:</span></span><br><span class="line">    <span class="keyword">return</span> price</span><br><span class="line"></span><br><span class="line">print(tea(<span class="number">15</span>))</span><br><span class="line">```  </span><br><span class="line">这就说明，装饰器是ice，传入的是fn，而传出的就变成wraps函数啦。  </span><br><span class="line"></span><br><span class="line">这个装饰器比较简单的原因是，装饰器本身没参数，而且也是函数装饰函数，要考虑的东西比较少。嘛，也是有可以写的很妙的装饰器的，下面这个就是个例子。这个例子里出现了functools.wraps，后面会讲一下。</span><br><span class="line"></span><br><span class="line"><span class="comment">## 装饰器版斐波那契数列： ##</span></span><br><span class="line">```python  </span><br><span class="line"><span class="keyword">from</span> functools <span class="keyword">import</span> wraps</span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">decorator</span><span class="params">(fn)</span>:</span></span><br><span class="line">    queue = &#123;&#125; </span><br><span class="line">    <span class="comment"># 创建空字典。将第x个数作为键，将处在那个位置的斐波那契数作为对应键的字典值。</span></span><br><span class="line">    miss = object() <span class="comment"># 对象</span></span><br><span class="line"></span><br><span class="line"><span class="meta">    @wraps(fn)</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">wrapper</span><span class="params">(*args)</span>:</span> <span class="comment"># decorator装饰器本体</span></span><br><span class="line">        result = queue.get(args, miss) </span><br><span class="line">        <span class="keyword">if</span> result <span class="keyword">is</span> miss: </span><br><span class="line">            <span class="comment"># 如果在空字典中第x个数为键的对应值不存在，那么</span></span><br><span class="line">            queue[args] = fn(*args) <span class="comment"># 运行函数</span></span><br><span class="line">            result = queue[args]</span><br><span class="line">        <span class="keyword">return</span> result <span class="comment"># 给出答案</span></span><br><span class="line">    </span><br><span class="line">    <span class="keyword">return</span> wrapper</span><br><span class="line"></span><br><span class="line"><span class="meta">@decorator</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">fib</span><span class="params">(n)</span>:</span></span><br><span class="line">    <span class="string">'''计算斐波那契数列，n是需要算出的第n+1个斐波那契数，因为第0个是斐波那契数列中的第1个数'''</span></span><br><span class="line">    <span class="keyword">if</span> n &lt; <span class="number">2</span>: <span class="comment"># 算fib(0), fib(1)的结果</span></span><br><span class="line">        <span class="keyword">return</span> n</span><br><span class="line">    <span class="keyword">return</span> fib(n - <span class="number">1</span>) + fib(n - <span class="number">2</span>)</span><br><span class="line">```  </span><br><span class="line"></span><br><span class="line"><span class="comment">## functools.wraps ##</span></span><br><span class="line">其实functools.wraps的内容看源码就足够了，这里有个知乎专栏可以辅助阅读：[Python functools.wraps 深入理解](https://zhuanlan.zhihu.com/p/<span class="number">45535784</span>)  </span><br><span class="line">简单概括一下就是：  </span><br><span class="line">&gt; - wraps函数在传入后，会以partial对象传出。  </span><br><span class="line">&gt; - 而partial会生成一个新可调用对象（这里的名字是wrapper），执行这个可调用对象时，会执行被包装函数（在这里是fib函数）的功能，参数则是装饰器的参数+被包装函数的原来的参数。  </span><br><span class="line">&gt; - 将被包装函数的属性拷贝给wrapper时，使用的函数名是update_wrapper，也就是partial的第一个参数。  </span><br><span class="line">  </span><br><span class="line">所以流程就是：</span><br><span class="line">&gt;  - 一个fib函数</span><br><span class="line">&gt;  - 执行decorator装饰器</span><br><span class="line">&gt;  - 创建字典blabla</span><br><span class="line">&gt;  - 将被包装函数(fib)传入wraps装饰器内，经过了partial内部的update_wrapper函数处理，将fib的属性拷贝到了装饰器内的函数，即wrapper上。</span><br><span class="line">&gt;  - 把fib函数指向wrapper函数</span><br><span class="line">&gt;  - 这样调用fib函数时，其实就是在调用经过partial处理的wrapper函数了。  </span><br><span class="line"></span><br><span class="line">说来说去，最关键的还是：</span><br><span class="line">**functools.wraps 旨在消除装饰器对原函数造成的影响，即对原函数的相关属性进行拷贝，已达到装饰器不修改原函数的目的。**  </span><br><span class="line">放在这个例子就是这一步：```queue[args] = fn(*args)```  </span><br><span class="line"></span><br><span class="line">functools.lru_cache()也能完成这一步。直接这样就行了：  </span><br><span class="line">```python  </span><br><span class="line"><span class="keyword">from</span> functools <span class="keyword">import</span> lru_cache</span><br><span class="line"><span class="meta">@lru_cache(maxsize=None)</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">fib</span><span class="params">(n)</span>:</span></span><br><span class="line">    <span class="keyword">if</span> n &lt; <span class="number">2</span>:</span><br><span class="line">        <span class="keyword">return</span> n</span><br><span class="line">    <span class="keyword">return</span> fib(n<span class="number">-1</span>) + fib(n<span class="number">-2</span>)</span><br></pre></td></tr></table></figure>
+<p>还比上面那个自己写的更优越，因为该装饰器提供了一个用于清理/使缓存失效的函数cache_clear()</p>
 <h2 id="带参数装饰器"><a href="#带参数装饰器" class="headerlink" title="带参数装饰器"></a>带参数装饰器</h2><p>主要还是多加一层，将装饰器的参数放到最外面。依然还是茶+冰的例子，但这次可以对冰的价格和名称进行改写了。这里不需要@wraps(fn)的原因是，这里的args不是被包装函数的参数，而是装饰器的参数。</p>
 <pre><code class="python"><span class="function"><span class="keyword">def</span> <span class="title">yiceng</span><span class="params">(*args, **kwargs)</span>:</span>
     <span class="function"><span class="keyword">def</span> <span class="title">ice</span><span class="params">(fn)</span>:</span>
@@ -435,7 +384,7 @@ print(fish(<span class="number">123</span>).perch(<span class="string">'steamed'
 <span class="comment"># ('123steamedgarlic', 51)</span></code></pre>
 <p>当然也是有描述器式的编写模式的，但是，如果仅靠自己硬写，不依赖任何库的话，反而使代码变得繁琐。原因在于在获得了实例的self后，在调用装饰器的模块时，也就是<code>def __call__(self, func, *args, **kwargs):</code>中依然没办法调取实例的self。所以怎么办呢？聪明的程序员们想出了object_proxy，也就是套娃装饰器：<br>先套一层object_proxy，把被装饰函数(wrapped)的名称与self扒下来，然后创建一个object_proxy子类(bound_function_wrapper)，获得object_proxy的一切属性，并且新建一个装饰器本体函数作为属性（也就是wrapper，换句话说就是你想让装饰器实现的功能）。然后再新建一个继承了object_proxy的子类(function_wrapper)，去获得上一个子类的所有东西，并输出你想要的wrapper。非常复杂，而且为了考虑wrapped的多种情况与wrapper的相合度，指不定您还得再写个装饰器去搞定function_wrapper…  </p>
 <p>所以啊…有一个库……叫做wrapt，很爽，可以爽爽。但是具体怎么爽我还没搞懂，而且这篇博客也有点太长了，类装饰器和装饰器模式之类的，下次再写吧。</p>
-<h1 id="参考文献"><a href="#参考文献" class="headerlink" title="参考文献"></a>参考文献</h1><p>一个讲座，我没太看明白：<a href="https://www.youtube.com/watch?v=W7Rv-km3ZuA" target="_blank" rel="noopener">Advanced methods for creating decorators</a>这几天想办法看看明白然后再水一篇博客吧。<br>一个超级酷炫的blog，主讲人写的：<a href="https://github.com/GrahamDumpleton/wrapt" target="_blank" rel="noopener">wrapt</a><br>cookbook它不香吗？<a href="https://python3-cookbook.readthedocs.io/zh_CN/latest/c09/p09_define_decorators_as_classes.html" target="_blank" rel="noopener">Python3 Cookbook</a></p>
+<h1 id="参考文献"><a href="#参考文献" class="headerlink" title="参考文献"></a>参考文献</h1><p>一个讲座，我没太看明白：<a href="https://www.youtube.com/watch?v=W7Rv-km3ZuA" target="_blank" rel="noopener">Advanced methods for creating decorators</a>这几天想办法看看明白然后再水一篇博客吧。<br>一个超级酷炫的blog，主讲人写的：<a href="https://github.com/GrahamDumpleton/wrapt" target="_blank" rel="noopener">wrapt</a><br>cookbook它不香吗？<a href="https://python3-cookbook.readthedocs.io/zh_CN/latest/c09/p09_define_decorators_as_classes.html" target="_blank" rel="noopener">Python3 Cookbook</a><br>functools官方文档。<a href="https://docs.python.org/zh-cn/3/library/functools.html" target="_blank" rel="noopener">docs.python.org/functools</a></p>
 <p>2020/02/09  </p>
 
     </div>
@@ -505,7 +454,7 @@ print(fish(<span class="number">123</span>).perch(<span class="string">'steamed'
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#装饰器"><span class="nav-number">1.</span> <span class="nav-text">装饰器</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#装饰器版斐波那契数列："><span class="nav-number">1.1.</span> <span class="nav-text">装饰器版斐波那契数列：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#functools-wraps"><span class="nav-number">1.2.</span> <span class="nav-text">functools.wraps</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#带参数装饰器"><span class="nav-number">1.3.</span> <span class="nav-text">带参数装饰器</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#用类写装饰器"><span class="nav-number">1.4.</span> <span class="nav-text">用类写装饰器</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#不带参数的用类写的装饰器"><span class="nav-number">1.4.1.</span> <span class="nav-text">不带参数的用类写的装饰器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#带参数的用类写的装饰器"><span class="nav-number">1.4.2.</span> <span class="nav-text">带参数的用类写的装饰器</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#参考文献"><span class="nav-number">2.</span> <span class="nav-text">参考文献</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#装饰器"><span class="nav-number">1.</span> <span class="nav-text">装饰器</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#带参数装饰器"><span class="nav-number">1.1.</span> <span class="nav-text">带参数装饰器</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#用类写装饰器"><span class="nav-number">1.2.</span> <span class="nav-text">用类写装饰器</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#不带参数的用类写的装饰器"><span class="nav-number">1.2.1.</span> <span class="nav-text">不带参数的用类写的装饰器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#带参数的用类写的装饰器"><span class="nav-number">1.2.2.</span> <span class="nav-text">带参数的用类写的装饰器</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#参考文献"><span class="nav-number">2.</span> <span class="nav-text">参考文献</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -521,20 +470,20 @@ print(fish(<span class="number">123</span>).perch(<span class="string">'steamed'
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">20</span>
+          <span class="site-state-item-count">22</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">6</span>
+        <span class="site-state-item-count">7</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">23</span>
+        <span class="site-state-item-count">24</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>
