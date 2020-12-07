@@ -13,42 +13,12 @@
 <link rel="stylesheet" href="/css/main.css">
 
 
-<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
-
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
 
 <script id="hexo-configurations">
-  var NexT = window.NexT || {};
-  var CONFIG = {
-    root: '/',
-    scheme: 'Mist',
-    version: '7.4.2',
-    exturl: false,
-    sidebar: {"position":"left","display":"hide","offset":12,"onmobile":false},
-    copycode: {"enable":false,"show_result":false,"style":null},
-    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
-    bookmark: {"enable":false,"color":"#222","save":"auto"},
-    fancybox: false,
-    mediumzoom: false,
-    lazyload: false,
-    pangu: false,
-    algolia: {
-      appID: '',
-      apiKey: '',
-      indexName: '',
-      hits: {"per_page":10},
-      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
-    },
-    localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
-    path: '',
-    motion: {"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
-    translation: {
-      copy_button: 'Copy',
-      copy_success: 'Copied',
-      copy_failure: 'Copy failed'
-    },
-    sidebarPadding: 40
-  };
-</script>
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"yoursite.com","root":"/","scheme":"Mist","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"hide","offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
 
   <meta property="og:type" content="website">
 <meta property="og:title" content="Plus of Oval">
@@ -64,17 +34,14 @@
   // https://hexo.io/docs/variables.html
   CONFIG.page = {
     sidebar: "",
-    isHome: true,
-    isPost: false,
-    isPage: false,
-    isArchive: false
+    isHome : true,
+    isPost : false,
+    lang   : 'en'
   };
 </script>
 
   <title>Plus of Oval</title>
   
-
-
 
 
 
@@ -112,17 +79,6 @@
 
     <header class="header" itemscope itemtype="http://schema.org/WPHeader">
       <div class="header-inner"><div class="site-brand-container">
-  <div class="site-meta">
-
-    <div>
-      <a href="/" class="brand" rel="start">
-        <span class="logo-line-before"><i></i></span>
-        <span class="site-title">Plus of Oval</span>
-        <span class="logo-line-after"><i></i></span>
-      </a>
-    </div>
-  </div>
-
   <div class="site-nav-toggle">
     <div class="toggle" aria-label="Toggle navigation bar">
       <span class="toggle-line toggle-line-first"></span>
@@ -130,40 +86,58 @@
       <span class="toggle-line toggle-line-last"></span>
     </div>
   </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Plus of Oval</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
 </div>
 
 
+
+
 <nav class="site-nav">
-  
-  <ul id="menu" class="menu">
+  <ul id="menu" class="main-menu menu">
         <li class="menu-item menu-item-home">
 
-    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>Home</a>
+    <a href="/" rel="section"><i class="home fa-fw"></i>Home</a>
 
   </li>
         <li class="menu-item menu-item-about">
 
-    <a href="/about/" rel="section"><i class="fa fa-fw fa-user"></i>About</a>
+    <a href="/about/" rel="section"><i class="user fa-fw"></i>About</a>
 
   </li>
         <li class="menu-item menu-item-tags">
 
-    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>Tags</a>
+    <a href="/tags/" rel="section"><i class="tags fa-fw"></i>Tags</a>
 
   </li>
         <li class="menu-item menu-item-categories">
 
-    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>Categories</a>
+    <a href="/categories/" rel="section"><i class="th fa-fw"></i>Categories</a>
 
   </li>
         <li class="menu-item menu-item-archives">
 
-    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>Archives</a>
+    <a href="/archives/" rel="section"><i class="archive fa-fw"></i>Archives</a>
 
   </li>
   </ul>
-
 </nav>
+
+
+
+
 </div>
     </header>
 
@@ -179,14 +153,174 @@
         <div class="content-wrap">
           
 
-          <div class="content">
+          <div class="content index posts-expand">
             
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/11/21/Subarashiki-hibi/">
 
-  <div class="posts-expand">
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://avatar.saraba1st.com/images/noavatar_small.gif">
+      <meta itemprop="name" content="Oval_plus">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Plus of Oval">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/11/21/Subarashiki-hibi/" class="post-title-link" itemprop="url">美好的每一天？</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2020-11-21 22:44:26" itemprop="dateCreated datePublished" datetime="2020-11-21T22:44:26+08:00">2020-11-21</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2020-12-07 13:44:37" itemprop="dateModified" datetime="2020-12-07T13:44:37+08:00">2020-12-07</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Galgame/" itemprop="url" rel="index"><span itemprop="name">Galgame</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>在人均扶她自厨的班固米，素晴日排第六，因为前五分别是野吹，兰斯10，ever17，樱之诗和时之笛。所以班固米还是人均扶她自厨，因为樱之诗也是扶她自的。也说明汉化才是第一生产力，因为兰斯10和樱之诗都汉化了。  </p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2020/11/21/Subarashiki-hibi/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
         
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
   
   
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="en">
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/11/20/about-index-futures/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://avatar.saraba1st.com/images/noavatar_small.gif">
+      <meta itemprop="name" content="Oval_plus">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Plus of Oval">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/11/20/about-index-futures/" class="post-title-link" itemprop="url">About index futures</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2020-11-20 15:25:22" itemprop="dateCreated datePublished" datetime="2020-11-20T15:25:22+08:00">2020-11-20</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2020-11-21 22:43:54" itemprop="dateModified" datetime="2020-11-21T22:43:54+08:00">2020-11-21</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Learning/" itemprop="url" rel="index"><span itemprop="name">Learning</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>So it is the blog that about Chinese index futures.  It would be updated after the result is discovered.  </p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2020/11/20/about-index-futures/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/11/14/2020-anime-summary/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -199,15 +333,15 @@
       <meta itemprop="name" content="Plus of Oval">
     </span>
       <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
+        <h2 class="post-title" itemprop="name headline">
           
             <a href="/2020/11/14/2020-anime-summary/" class="post-title-link" itemprop="url">2020年动画总结</a>
-        </h1>
+        </h2>
 
         <div class="post-meta">
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
+                <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">Posted on</span>
 
@@ -215,20 +349,18 @@
             </span>
               <span class="post-meta-item">
                 <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
+                  <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2020-11-16 11:25:31" itemprop="dateModified" datetime="2020-11-16T11:25:31+08:00">2020-11-16</time>
+                <time title="Modified: 2020-11-20 15:25:50" itemprop="dateModified" datetime="2020-11-20T15:25:50+08:00">2020-11-20</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
+                <i class="far fa-folder"></i>
               </span>
               <span class="post-meta-item-text">In</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Anime/" itemprop="url" rel="index">
-                    <span itemprop="name">Anime</span>
-                  </a>
+                  <a href="/categories/Anime/" itemprop="url" rel="index"><span itemprop="name">Anime</span></a>
                 </span>
             </span>
 
@@ -266,10 +398,10 @@
   
   
 
-        
+      
   
   
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="en">
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/09/10/A-short-update/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -282,15 +414,15 @@
       <meta itemprop="name" content="Plus of Oval">
     </span>
       <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
+        <h2 class="post-title" itemprop="name headline">
           
             <a href="/2020/09/10/A-short-update/" class="post-title-link" itemprop="url">A short update</a>
-        </h1>
+        </h2>
 
         <div class="post-meta">
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
+                <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">Posted on</span>
               
@@ -299,13 +431,11 @@
             </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
+                <i class="far fa-folder"></i>
               </span>
               <span class="post-meta-item-text">In</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Reality/" itemprop="url" rel="index">
-                    <span itemprop="name">Reality</span>
-                  </a>
+                  <a href="/categories/Reality/" itemprop="url" rel="index"><span itemprop="name">Reality</span></a>
                 </span>
             </span>
 
@@ -321,14 +451,8 @@
 
       
           <p>It has been long time to write something here.  During the last three months, I found a new job.  All right, the job was introduced, not found.<br>However, job is not the issue.  Nobody would like to talk about job after hours.<br>Only watching Gundam ZZ, no other animes &gt;.&lt; .  Clear the second novel galgame.  A beautiful game, but the CG cannot satisfy.<br>Maybe write a vscode extension of s1reader in the future.<br>Sooo long time not write a blog, even forget what to write, and the expression desire has disappeared lol.<br>Hope to find a nice job.<br>Always the job lol.  </p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2020/09/10/A-short-update/#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
+<p>2020/09/10</p>
+
       
     </div>
 
@@ -343,10 +467,10 @@
   
   
 
-        
+      
   
   
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="en">
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/06/15/Yesterday%20wo%20utatte/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -359,15 +483,15 @@
       <meta itemprop="name" content="Plus of Oval">
     </span>
       <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
+        <h2 class="post-title" itemprop="name headline">
           
             <a href="/2020/06/15/Yesterday%20wo%20utatte/" class="post-title-link" itemprop="url">昨日之歌二三事</a>
-        </h1>
+        </h2>
 
         <div class="post-meta">
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
+                <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">Posted on</span>
               
@@ -376,13 +500,11 @@
             </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
+                <i class="far fa-folder"></i>
               </span>
               <span class="post-meta-item-text">In</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/TV-Anime/" itemprop="url" rel="index">
-                    <span itemprop="name">TV Anime</span>
-                  </a>
+                  <a href="/categories/TV-Anime/" itemprop="url" rel="index"><span itemprop="name">TV Anime</span></a>
                 </span>
             </span>
 
@@ -398,14 +520,8 @@
 
       
           <p>突然想到了就写写。<br>我觉得《昨日之歌》是部很好的动画，它很真实，我是说人物性格和他们的做法相符这一点上。<br>直接下结论吧，榀子老师是婊。<br>我觉得一条一条列出来从而说明榀子老师是婊很没有意思，因为连这点东西都要说明的人说明根本就不是一条道上的。<br><img src="https://i.loli.net/2020/06/15/RPCziMhKm6WG9NF.png" alt="tomotachi.png"><br>我对象如果拒绝了我以后还跟我说想做朋友，一次两次可以的。次数太多就是在戏弄人的感情，自己会受伤没错，身边的人也会受伤。只考虑自己少了个朋友，或者说少了个备胎因此而十分难过，所以就希望大家还是朋友，那为什么不考虑一下对方的想法呢。就因为对方喜欢自己，心甘情愿等待，所以就值得被这样做吗？很有一种“我上钩了，但是你妈死了，这一切值得吗？”的感觉。对方付出的感情都被当作消费品，用完就可以扔了。对方受的伤都是他们愿意，所以他们受伤也是理所应当的，是不需要安慰，是不需要造成受伤的人去反思的。这个逻辑我是无论如何都不能认同的。<br>顺便一说软弱的人是会一直软弱下去的，因为他们从来认识不到自己的软弱。换句话说，不觉得自己有错，所以也不会去改正。我很能理解这种性格，但是，理解归理解，讨厌归讨厌。<br>陆生也不是什么好鸟。<br>我选养鸟。  </p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2020/06/15/Yesterday%20wo%20utatte/#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
+<p>2020/06/15</p>
+
       
     </div>
 
@@ -420,10 +536,10 @@
   
   
 
-        
+      
   
   
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="en">
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/04/23/Victory-Gundam/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -436,15 +552,15 @@
       <meta itemprop="name" content="Plus of Oval">
     </span>
       <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
+        <h2 class="post-title" itemprop="name headline">
           
             <a href="/2020/04/23/Victory-Gundam/" class="post-title-link" itemprop="url">机动战士V高达</a>
-        </h1>
+        </h2>
 
         <div class="post-meta">
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
+                <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">Posted on</span>
               
@@ -453,13 +569,11 @@
             </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
+                <i class="far fa-folder"></i>
               </span>
               <span class="post-meta-item-text">In</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/TV-Anime/" itemprop="url" rel="index">
-                    <span itemprop="name">TV Anime</span>
-                  </a>
+                  <a href="/categories/TV-Anime/" itemprop="url" rel="index"><span itemprop="name">TV Anime</span></a>
                 </span>
             </span>
 
@@ -497,10 +611,10 @@
   
   
 
-        
+      
   
   
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="en">
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/04/15/VScode-Remote/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -513,15 +627,15 @@
       <meta itemprop="name" content="Plus of Oval">
     </span>
       <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
+        <h2 class="post-title" itemprop="name headline">
           
             <a href="/2020/04/15/VScode-Remote/" class="post-title-link" itemprop="url">VSCode Remote</a>
-        </h1>
+        </h2>
 
         <div class="post-meta">
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
+                <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">Posted on</span>
               
@@ -530,13 +644,11 @@
             </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
+                <i class="far fa-folder"></i>
               </span>
               <span class="post-meta-item-text">In</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Toys/" itemprop="url" rel="index">
-                    <span itemprop="name">Toys</span>
-                  </a>
+                  <a href="/categories/Toys/" itemprop="url" rel="index"><span itemprop="name">Toys</span></a>
                 </span>
             </span>
 
@@ -551,15 +663,47 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <p>今天总算是搞定了用树莓派抓S1的玩具，并且发现VSCode是真正的生产力工具，微软这也太行了。<br>VSCode有个Extension，可以让用户利用ssh公钥加密对远程服务器上的代码进行维护。翻了翻，发现目前国内这方面的中文博客都写得不怎么样，所以自己写一篇备忘。  </p><p>先放一下能够作为本机和服务器的系统要求：  </p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2020/04/15/VScode-Remote/#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
+          <p>今天总算是搞定了用树莓派抓S1的玩具，并且发现VSCode是真正的生产力工具，微软这也太行了。<br>VSCode有个Extension，可以让用户利用ssh公钥加密对远程服务器上的代码进行维护。翻了翻，发现目前国内这方面的中文博客都写得不怎么样，所以自己写一篇备忘。  </p>
+<p>先放一下能够作为本机和服务器的系统要求：  </p>
+<blockquote>
+<p><strong>Local</strong>: A supported OpenSSH compatible SSH client must also be installed.<br><strong>Remote SSH host</strong>:  A running SSH server on:</p>
+<ul>
+<li>x86_64 Debian 8+, Ubuntu 16.04+, CentOS / RHEL 7+.  </li>
+<li>ARMv7l (AArch32) Raspbian Stretch/9+ (32-bit).  </li>
+<li>ARMv8l (AArch64) Ubuntu 18.04+ (64-bit).  </li>
+<li>Windows 10 / Server 2016/2019 (1803+) using the official OpenSSH Server.  </li>
+<li>macOS 10.14+ (Mojave) SSH hosts with Remote Login enabled.  </li>
+</ul>
+</blockquote>
+<p>如果不满足以上要求，就可以洗洗睡了（指换个方法）  </p>
+<h1 id="SSH配置"><a href="#SSH配置" class="headerlink" title="SSH配置"></a>SSH配置</h1><h2 id="SSH公钥查找"><a href="#SSH公钥查找" class="headerlink" title="SSH公钥查找"></a>SSH公钥查找</h2><p>如果有使用过GitBash相关产品，很有可能本机（即需要使用VSCode进行远程开发的机器）上已经存在相关的SSH。不过依旧可以再创建，这没有什么问题。本机上的SSH，对于Windows用户，公钥可能存在于<code>~/username/.ssh/</code>文件下，<code>.ssh</code>文件夹是隐藏的所以要注意浏览模式。Linux用户的公钥则存在于<code>~/.ssh</code>文件夹下。由于某些原因（穷），所以不知道Mac用户的.ssh文件在哪里。<br>公钥是以<code>id_rsa.pub</code>和<code>id_rsa</code>的形式成对出现，前者是公钥部分，后者是本机的私钥，需要与服务器（在本例中为树莓派）的公钥进行一些操作保证登录是安全的。具体原理可以看参考文献<a href="#sshlogin">[1]</a>。</p>
+<h2 id="SSH公钥创建"><a href="#SSH公钥创建" class="headerlink" title="SSH公钥创建"></a>SSH公钥创建</h2><p>首先，要对本机（使用VSCode的机器）创建SSH公钥。Mac用户与Linux用户都有现成的相关软件可以使用所以不需要额外下载。Windows用户需要下载一个OpenSSH软件。<br>利用命令  </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ssh-keygen</span><br></pre></td></tr></table></figure>
+
+<p>就可以在当前目录下生成一个SSH。  </p>
+<h2 id="SSH登录"><a href="#SSH登录" class="headerlink" title="SSH登录"></a>SSH登录</h2><p>接下来回到服务器（即本例中的树莓派），先查看允许SSH连接是否安装并打开。（如果已经是有远程桌面连接的，那么就已经安装并打开，不需要再进行如下的操作）<br>具体代码为：  </p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get install openssh-server <span class="comment"># 安装ssh服务</span></span><br><span class="line">sudo service ssh start <span class="comment"># 启动ssh服务</span></span><br><span class="line">sudo service ssh status <span class="comment"># 检测ssh是否运行</span></span><br></pre></td></tr></table></figure>
+<p>如果成功，那么在ssh.services的Active一行应该是显示Active的。  </p>
+<p>随后需要在服务器（即本例中的树莓派）中的<code>~/home/username/.ssh/</code>文件夹中新创建一个<strong>authorized_keys</strong>文件。在里面写入本机（即使用VSCode的机器）中新创建出的私钥<code>id_rsa</code>中的内容。私钥内容如果以txt格式打开应该只有一行。<br>这里可以在本机上使用命令：  </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ssh-copy-id &lt;USERNAME&gt;@&lt;IP-ADDRESS&gt;</span><br></pre></td></tr></table></figure>
+
+<p><strong>此时需要输入树莓派的密码</strong>  </p>
+<p>或者使用</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cat ~/.ssh/id_rsa.pub | ssh &lt;USERNAME&gt;@&lt;IP-ADDRESS&gt; &apos;mkdir -p ~/.ssh &amp;&amp; cat &gt;&gt; ~/.ssh/authorized_keys&apos;</span><br></pre></td></tr></table></figure>
+
+<p>如果这里树莓派报错，请参见参考文献<a href="#pi">[2]</a>的Copy your public key to your Raspberry Pi部分。  </p>
+<p>由于我没有下载OpenSSH，所以我直接将文件用FileZilla传到了树莓派上然后复制粘贴。总之条条大路通罗马，核心目的就是在指定的服务器上的指定位置（~/.ssh）放入一个名为authorized_keys的文件夹，里面是本机创建出的私钥id_rsa的内容。  </p>
+<p>自此，本机与服务器端上的SSH设置已经完成。</p>
+<h1 id="VSCode设置"><a href="#VSCode设置" class="headerlink" title="VSCode设置"></a>VSCode设置</h1><p>第一步，需要install名为Remote的Extension。<br>第二步，Ctrl+Shift+P或者是直接F1调出Command Palatte<br>第三步，输入Remote，选中下方的<strong>Remote-SSH: Connect to Host…</strong><br>第四步，输入你即将接入的服务器的名字与host地址，以@连接：<strong>username@host</strong><br>第五步，可以用了。  </p>
+<p>如果VSCode没法自动选择即将要接入的服务器的系统是什么，会让用户来选择服务器是Linux，Windows还是MacOS。</p>
+<h2 id="Config文件"><a href="#Config文件" class="headerlink" title="Config文件"></a>Config文件</h2><p>Config文件里，格式如下：  </p>
+<pre><code>Host name-of-ssh-host-here
+    User your-user-name-on-host
+    HostName host-fqdn-or-ip-goes-here</code></pre><p>关于如何用新的SSH进行连接，请见参考文献<a href="#official">[3]</a>的tips部分  </p>
+<p>最后说一下怎么关掉Remote：<br>File - Close Remote Window  </p>
+<h1 id="参考文献"><a href="#参考文献" class="headerlink" title="参考文献"></a>参考文献</h1><p><span id="sshlogin">[1]</span> <a href="https://www.ruanyifeng.com/blog/2011/12/ssh_remote_login.html" target="_blank" rel="noopener">别人的博客 - SSH原理与运用（一）：远程登录</a><br><span id="pi">[2]</span>  <a href="https://www.raspberrypi.org/documentation/remote-access/ssh/passwordless.md" target="_blank" rel="noopener">树莓派官方文档 - Passwordless SSH access</a><br><span id="official">[3]</span> <a href="https://code.visualstudio.com/docs/remote/remote-overview" target="_blank" rel="noopener">VSCode官方文档 - VS Code Remote Development</a>  </p>
+<p>2020/04/15</p>
+
       
     </div>
 
@@ -574,10 +718,10 @@
   
   
 
-        
+      
   
   
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="en">
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/03/16/0083/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -590,15 +734,15 @@
       <meta itemprop="name" content="Plus of Oval">
     </span>
       <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
+        <h2 class="post-title" itemprop="name headline">
           
             <a href="/2020/03/16/0083/" class="post-title-link" itemprop="url">别回所罗门了</a>
-        </h1>
+        </h2>
 
         <div class="post-meta">
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
+                <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">Posted on</span>
               
@@ -607,13 +751,11 @@
             </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
+                <i class="far fa-folder"></i>
               </span>
               <span class="post-meta-item-text">In</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/TV-Anime/" itemprop="url" rel="index">
-                    <span itemprop="name">TV Anime</span>
-                  </a>
+                  <a href="/categories/TV-Anime/" itemprop="url" rel="index"><span itemprop="name">TV Anime</span></a>
                 </span>
             </span>
 
@@ -651,167 +793,6 @@
   
   
 
-        
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="en">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/02/27/Metroidvania-Game/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="https://avatar.saraba1st.com/images/noavatar_small.gif">
-      <meta itemprop="name" content="Oval_plus">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Plus of Oval">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/02/27/Metroidvania-Game/" class="post-title-link" itemprop="url">类银河战士恶魔城游戏</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-              
-
-              <time title="Created: 2020-02-27 22:37:58 / Modified: 23:31:32" itemprop="dateCreated datePublished" datetime="2020-02-27T22:37:58+08:00">2020-02-27</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Reality/" itemprop="url" rel="index">
-                    <span itemprop="name">Reality</span>
-                  </a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>我最喜欢打类银河战士恶魔城游戏，也就是标题。仔细想想原因，可能是因为我打的游戏比较少。各种游戏都碰过，但都没能深入的玩下去。  </p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2020/02/27/Metroidvania-Game/#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-        
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="en">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/02/21/Descriptor/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="https://avatar.saraba1st.com/images/noavatar_small.gif">
-      <meta itemprop="name" content="Oval_plus">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Plus of Oval">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/02/21/Descriptor/" class="post-title-link" itemprop="url">Descriptor</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2020-02-21 18:18:21" itemprop="dateCreated datePublished" datetime="2020-02-21T18:18:21+08:00">2020-02-21</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2020-02-22 22:20:58" itemprop="dateModified" datetime="2020-02-22T22:20:58+08:00">2020-02-22</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Toys/" itemprop="url" rel="index">
-                    <span itemprop="name">Toys</span>
-                  </a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>稍微写写描述符。  </p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2020/02/21/Descriptor/#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-  </div>
 
   
   <nav class="pagination">
@@ -822,6 +803,28 @@
 
           </div>
           
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
 
         </div>
           
@@ -851,8 +854,8 @@
 
       <div class="site-overview-wrap sidebar-panel">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
-  <img class="site-author-image" itemprop="image" alt="Oval_plus"
-    src="https://avatar.saraba1st.com/images/noavatar_small.gif">
+    <img class="site-author-image" itemprop="image" alt="Oval_plus"
+      src="https://avatar.saraba1st.com/images/noavatar_small.gif">
   <p class="site-author-name" itemprop="name">Oval_plus</p>
   <div class="site-description" itemprop="description"></div>
 </div>
@@ -861,20 +864,20 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">27</span>
+          <span class="site-state-item-count">29</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">8</span>
+        <span class="site-state-item-count">9</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">29</span>
+        <span class="site-state-item-count">33</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>
@@ -882,8 +885,7 @@
 
 
   <div class="links-of-blogroll motion-element">
-    <div class="links-of-blogroll-title">
-      <i class="fa fa-fw fa-link"></i>
+    <div class="links-of-blogroll-title"><i class="link fa-fw"></i>
       Links
     </div>
     <ul class="links-of-blogroll-list">
@@ -907,19 +909,18 @@
       <div class="footer-inner">
         
 
+        
+
 <div class="copyright">
   
   &copy; 
   <span itemprop="copyrightYear">2020</span>
   <span class="with-love">
-    <i class="fa fa-user"></i>
+    <i class="user"></i>
   </span>
   <span class="author" itemprop="copyrightHolder">Oval_plus</span>
 </div>
-  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a>
-  </div>
-  <span class="post-meta-divider">|</span>
-  <div class="theme-info">Theme – <a href="https://mist.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Mist</a>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://mist.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Mist</a>
   </div>
 
         
@@ -927,7 +928,7 @@
   <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
     <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
       <span class="post-meta-item-icon">
-        <i class="fa fa-user"></i>
+        <i class="user"></i>
       </span>
       <span class="site-uv" title="Total Visitors">
         <span id="busuanzi_value_site_uv"></span>
@@ -936,7 +937,7 @@
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
       <span class="post-meta-item-icon">
-        <i class="fa fa-eye"></i>
+        <i class="eye"></i>
       </span>
       <span class="site-pv" title="Total Views">
         <span id="busuanzi_value_site_pv"></span>
@@ -951,11 +952,6 @@
 
 
 
-
-
-
-
-        
       </div>
     </footer>
   </div>
@@ -984,14 +980,19 @@
 
 
 
-
-
-
   
 
   
-
-  
+  <script src="//cdn.jsdelivr.net/npm/quicklink@1/dist/quicklink.umd.js"></script>
+  <script>
+      window.addEventListener('load', () => {
+      quicklink({
+        timeout : 3000,
+        priority: true,
+        ignores : [uri => uri.includes('#'),uri => uri === 'http://yoursite.com/',]
+      });
+      });
+  </script>
 
 </body>
 </html>

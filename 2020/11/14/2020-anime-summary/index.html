@@ -13,42 +13,12 @@
 <link rel="stylesheet" href="/css/main.css">
 
 
-<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
-
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
 
 <script id="hexo-configurations">
-  var NexT = window.NexT || {};
-  var CONFIG = {
-    root: '/',
-    scheme: 'Mist',
-    version: '7.4.2',
-    exturl: false,
-    sidebar: {"position":"left","display":"hide","offset":12,"onmobile":false},
-    copycode: {"enable":false,"show_result":false,"style":null},
-    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
-    bookmark: {"enable":false,"color":"#222","save":"auto"},
-    fancybox: false,
-    mediumzoom: false,
-    lazyload: false,
-    pangu: false,
-    algolia: {
-      appID: '',
-      apiKey: '',
-      indexName: '',
-      hits: {"per_page":10},
-      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
-    },
-    localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
-    path: '',
-    motion: {"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
-    translation: {
-      copy_button: 'Copy',
-      copy_success: 'Copied',
-      copy_failure: 'Copy failed'
-    },
-    sidebarPadding: 40
-  };
-</script>
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"yoursite.com","root":"/","scheme":"Mist","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"hide","offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
 
   <meta name="description" content="2020年马上要结束了（指还有俩月），估计剩下的俩月能看完橙路就不错了，所以差不多可以写今年的动画总结了。">
 <meta name="keywords" content="Anime,Anime Movie">
@@ -58,7 +28,7 @@
 <meta property="og:site_name" content="Plus of Oval">
 <meta property="og:description" content="2020年马上要结束了（指还有俩月），估计剩下的俩月能看完橙路就不错了，所以差不多可以写今年的动画总结了。">
 <meta property="og:locale" content="en">
-<meta property="og:updated_time" content="2020-11-16T03:25:31.406Z">
+<meta property="og:updated_time" content="2020-11-20T07:25:50.738Z">
 <meta name="twitter:card" content="summary">
 
 <link rel="canonical" href="http://yoursite.com/2020/11/14/2020-anime-summary/">
@@ -68,17 +38,14 @@
   // https://hexo.io/docs/variables.html
   CONFIG.page = {
     sidebar: "",
-    isHome: false,
-    isPost: true,
-    isPage: false,
-    isArchive: false
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
   };
 </script>
 
   <title>2020年动画总结 | Plus of Oval</title>
   
-
-
 
 
 
@@ -116,17 +83,6 @@
 
     <header class="header" itemscope itemtype="http://schema.org/WPHeader">
       <div class="header-inner"><div class="site-brand-container">
-  <div class="site-meta">
-
-    <div>
-      <a href="/" class="brand" rel="start">
-        <span class="logo-line-before"><i></i></span>
-        <span class="site-title">Plus of Oval</span>
-        <span class="logo-line-after"><i></i></span>
-      </a>
-    </div>
-  </div>
-
   <div class="site-nav-toggle">
     <div class="toggle" aria-label="Toggle navigation bar">
       <span class="toggle-line toggle-line-first"></span>
@@ -134,40 +90,58 @@
       <span class="toggle-line toggle-line-last"></span>
     </div>
   </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Plus of Oval</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
 </div>
 
 
+
+
 <nav class="site-nav">
-  
-  <ul id="menu" class="menu">
+  <ul id="menu" class="main-menu menu">
         <li class="menu-item menu-item-home">
 
-    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>Home</a>
+    <a href="/" rel="section"><i class="home fa-fw"></i>Home</a>
 
   </li>
         <li class="menu-item menu-item-about">
 
-    <a href="/about/" rel="section"><i class="fa fa-fw fa-user"></i>About</a>
+    <a href="/about/" rel="section"><i class="user fa-fw"></i>About</a>
 
   </li>
         <li class="menu-item menu-item-tags">
 
-    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>Tags</a>
+    <a href="/tags/" rel="section"><i class="tags fa-fw"></i>Tags</a>
 
   </li>
         <li class="menu-item menu-item-categories">
 
-    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>Categories</a>
+    <a href="/categories/" rel="section"><i class="th fa-fw"></i>Categories</a>
 
   </li>
         <li class="menu-item menu-item-archives">
 
-    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>Archives</a>
+    <a href="/archives/" rel="section"><i class="archive fa-fw"></i>Archives</a>
 
   </li>
   </ul>
-
 </nav>
+
+
+
+
 </div>
     </header>
 
@@ -183,14 +157,13 @@
         <div class="content-wrap">
           
 
-          <div class="content">
+          <div class="content post posts-expand">
             
 
-  <div class="posts-expand">
-      
+    
   
   
-  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="en">
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/11/14/2020-anime-summary/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -210,7 +183,7 @@
         <div class="post-meta">
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
+                <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">Posted on</span>
 
@@ -218,27 +191,25 @@
             </span>
               <span class="post-meta-item">
                 <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
+                  <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2020-11-16 11:25:31" itemprop="dateModified" datetime="2020-11-16T11:25:31+08:00">2020-11-16</time>
+                <time title="Modified: 2020-11-20 15:25:50" itemprop="dateModified" datetime="2020-11-20T15:25:50+08:00">2020-11-20</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
+                <i class="far fa-folder"></i>
               </span>
               <span class="post-meta-item-text">In</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Anime/" itemprop="url" rel="index">
-                    <span itemprop="name">Anime</span>
-                  </a>
+                  <a href="/categories/Anime/" itemprop="url" rel="index"><span itemprop="name">Anime</span></a>
                 </span>
             </span>
 
           
             <span class="post-meta-item" title="Views" id="busuanzi_container_page_pv" style="display: none;">
               <span class="post-meta-item-icon">
-                <i class="fa fa-eye"></i>
+                <i class="eye"></i>
               </span>
               <span class="post-meta-item-text">Views: </span>
               <span id="busuanzi_value_page_pv"></span>
@@ -255,7 +226,11 @@
       
         <p>2020年马上要结束了（指还有俩月），估计剩下的俩月能看完橙路就不错了，所以差不多可以写今年的动画总结了。</p>
 <a id="more"></a>
-<p>今年的年度动画毫无疑问是《TURN A高达》。铸剑为犁，是真正的高达动画，是白富野才能做出来的优秀作品。前期月球人与地球人之间的争端在大小姐和女王互换身份以后得到了升华，使得故事更加具有戏剧性。后期矛盾变为月球内部的派系斗争，虽说比前期在矛盾性与合理性上弱了一些，但是瑕不掩瑜。最后的五分钟月の繭收尾，是我心目中最好的后日谈。ED限りなき旅路接于其后，这才是真正的一直以来的积累不会白费，道路会一直持续下去。<br>人物的成长显而易见，有理有据，而不是嗷的一下就成长了。二小姐好萌~最后二小姐在森林中骑车，把木鱼扔到河里，实在是令人心痛，是傲娇的最期。<br>田园牧歌式的氛围与超前卫的机设，再加上光头式的剧情与人物塑造，是我心中最好的高达动画。<br>今年还看了机动战士高达ZZ，アニメじゃない。ZZ感觉确实没啥好说的，剧本统筹上存在一些问题，比方说普露死了，阿伽玛的船员却依然十分快活。作画处处透露着一股没钱的气息，但是又有几集的作画堪称剧场版。妹妹没死堪称可喜可贺<br>还看了0083，<a href="https://oval-plus.github.io/2020/03/16/0083/" target="_blank" rel="noopener">今西隆志傻逼</a>。<br>还看了<a href="https://oval-plus.github.io/2020/04/23/Victory-Gundam/" target="_blank" rel="noopener">V高达</a>，V高达和Turn A连着看就能感觉到对比强烈的黑白富野。V高达我还是比较喜欢的，就是作画看着很穷，人设也不是很喜欢，全靠剧情加持，OPED也不错。有一说一高达的OPED都挺不错的。<br>独角兽也看了两集，那个油腻的上色实在是……21世纪的编剧和经历过左翼运动的光头对政治认知的不同仅仅通过两集就能体现的淋漓尽致，或者说21世纪的编剧压根就不想写政治而只想写儿女情长。对于催生出机动战士高达NT这种傻逼片子的独角兽，我实在是没办法说半个好字。<br>高达相关的动画今年大概就看了这么多，明年应该还会继续看高达动画，毕竟还有一个闪哈。<br>年初看了爱死机，觉得也就那样。有几集特别惊艳，剩下的表现平平无奇。惊艳的集数有的是美术形式惊艳，比如蜘蛛侠那个美术指导做的那集，有的是点子惊艳，比如祖马蓝，还有的就是萌，比如仨安卓。<br>还看了香蕉鱼。是受台长蛊惑才去看的，台长声称这片他看出了百合味，看完以后我一点儿没察觉出百合味。我不喜欢这片，动画特别给。而且给人的感觉是，亚修除了男主谁都能上，合着是NTR爱好者会喜欢的片。作画也不行，剧情也一般，男人的友谊不是这么描写的。要么是导演对男性友谊难以把握，要么是已经过了能够表现男性友谊的时代。但我觉得强风吹拂和排球少年都做的挺好的，所以应该是内海纮子……顺便一说内海还做过free……<br>攻壳机动队2045出了几个礼拜以后才看，人设变幼了，少佐还给自己的义体化了个妆，这合理吗？但是只要接受这个设定……也觉得很一般，完全比不上SAC和GIG，那当然也更比不上鸭子的剧场版。因为有个arise托底所以2045才没成为最烂的攻壳，还有下半期不知道什么时候出。<br>突发奇想看了下最终兵器彼女，这什么乱七八糟的片子。怎么样证明被改造成人形兵器的人是人而不是兵器，当然是让她一遍又一遍地重复自己是个兵器啦~<span style="background-color:#555;color:#555;border:1px solid #555;">最后一话看傻了，雪地裸体play</span>这都什么思路，为了虐而虐，没有必要，也没有意义。据说剧场版惊人地好看，回头可以看一下。<br>依然是突发奇想看了下电脑线圈。好看！主线流畅，单元回稳定，整体剧情水平十分之高。设定完善，剧情里还有很多可以深挖的地方，单元回基本都特别特别有趣。充分利用了动画这一媒体的优势，把一些比较难以拍摄的东西以动画形式展现（大智和电波养伊利加尔两个单元回，胡子那一单元回），让观众明白到什么叫动起来的画，什么叫用媒体承托创意。在EVA真心为你大战量产机那一段之后，又一次领教到了激光熊的厉害。<br>橙路还没看完所以就先不提了，话说丸户史明是真喜欢橙路啊……  </p>
+<p>今年的年度动画毫无疑问是《TURN A高达》。铸剑为犁，是真正的高达动画，是白富野才能做出来的优秀作品。前期月球人与地球人之间的争端在大小姐和女王互换身份以后得到了升华，使得故事更加具有戏剧性。后期矛盾变为月球内部的派系斗争，虽说比前期在矛盾性与合理性上弱了一些，但是瑕不掩瑜。最后的五分钟月の繭收尾，是我心目中最好的后日谈。ED限りなき旅路接于其后，这才是真正的一直以来的积累不会白费，道路会一直持续下去。<br>人物的成长显而易见，有理有据，而不是嗷的一下就成长了。二小姐好萌~最后二小姐在森林中骑车，把木鱼扔到河里，实在是令人心痛，是傲娇的最期。<br>田园牧歌式的氛围与超前卫的机设，再加上光头式的剧情与人物塑造，是我心中最好的高达动画。<br>今年还看了机动战士高达ZZ，アニメじゃない。ZZ感觉确实没啥好说的，剧本统筹上存在一些问题，比方说普露死了，阿伽玛的船员却依然十分快活。作画处处透露着一股没钱的气息，但是又有几集的作画堪称剧场版。妹妹没死堪称可喜可贺<br>还看了0083，<a href="https://oval-plus.github.io/2020/03/16/0083/" target="_blank" rel="noopener">今西隆志傻逼</a>。<br>还看了<a href="https://oval-plus.github.io/2020/04/23/Victory-Gundam/" target="_blank" rel="noopener">V高达</a>，V高达和Turn A连着看就能感觉到对比强烈的黑白富野。V高达我还是比较喜欢的，就是作画看着很穷，人设也不是很喜欢，全靠剧情加持，OPED也不错。有一说一高达的OPED都挺不错的。<br>独角兽也看了两集，那个油腻的上色实在是……21世纪的编剧和经历过左翼运动的光头对政治认知的不同仅仅通过两集就能体现的淋漓尽致，或者说21世纪的编剧压根就不想写政治而只想写儿女情长。对于催生出机动战士高达NT这种傻逼片子的独角兽，我实在是没办法说半个好字。<br>高达相关的动画今年大概就看了这么多，明年应该还会继续看高达动画，毕竟还有一个闪哈。  </p>
+<p>年初看了爱死机，觉得也就那样。有几集特别惊艳，剩下的表现平平无奇。惊艳的集数有的是美术形式惊艳，比如蜘蛛侠那个美术指导做的那集，有的是点子惊艳，比如祖马蓝，还有的就是萌，比如仨安卓。<br>还看了香蕉鱼。是受台长蛊惑才去看的，台长声称这片他看出了百合味，看完以后我一点儿没察觉出百合味。我不喜欢这片，动画特别给。而且给人的感觉是，亚修除了男主谁都能上，合着是NTR爱好者会喜欢的片。作画也不行，剧情也一般，男人的友谊不是这么描写的。要么是导演对男性友谊难以把握，要么是已经过了能够表现男性友谊的时代。但我觉得强风吹拂和排球少年都做的挺好的，所以应该是内海纮子……顺便一说内海还做过free……  </p>
+<p>攻壳机动队2045出了几个礼拜以后才看，人设变幼了，少佐还给自己的义体化了个妆，这合理吗？但是只要接受这个设定……也觉得很一般，完全比不上SAC和GIG，那当然也更比不上鸭子的剧场版。因为有个arise托底所以2045才没成为最烂的攻壳，还有下半期不知道什么时候出。<br>突发奇想看了下最终兵器彼女，这什么乱七八糟的片子。怎么样证明被改造成人形兵器的人是人而不是兵器，当然是让她一遍又一遍地重复自己是个兵器啦~<span style="background-color:#555;color:#555;border:1px solid #555;">最后一话看傻了，雪地裸体play</span>这都什么思路，为了虐而虐，没有必要，也没有意义。据说剧场版惊人地好看，回头可以看一下。  </p>
+<p>依然是突发奇想看了下电脑线圈。好看！主线流畅，单元回稳定，整体剧情水平十分之高。设定完善，剧情里还有很多可以深挖的地方，单元回基本都特别特别有趣。充分利用了动画这一媒体的优势，把一些比较难以拍摄的东西以动画形式展现（大智和电波养伊利加尔两个单元回，胡子那一单元回），让观众明白到什么叫动起来的画，什么叫用媒体承托创意。在EVA真心为你大战量产机那一段之后，又一次领教到了激光熊的厉害。  </p>
+<p>橙路还没看完所以就先不提了，话说丸户史明是真喜欢橙路啊……  </p>
 <p>最后讲讲和阿你妹没关的事，11/15去了weplay，大开眼界。人这么少的展会还是第一次去，感觉非常良好，试玩了非常多优秀的游戏，深感国内独立游戏大有可为。开发游戏也确实苦，那么多摊位，就没几个女性开发者，大部分是男性开发者。冲击性的事实令人劝退。明年应该还会再来，希望有朝一日以参展者的身份出展。<br>这几个礼拜还把素晴日推了，*冲击性的事实*。</p>
 <p>2020/11/16</p>
 
@@ -273,18 +248,18 @@
 
         
 
-          <div class="post-nav">
-            <div class="post-nav-next post-nav-item">
-                <a href="/2020/09/10/A-short-update/" rel="next" title="A short update">
-                  <i class="fa fa-chevron-left"></i> A short update
-                </a>
-            </div>
 
-            <span class="post-nav-divider"></span>
-
-            <div class="post-nav-prev post-nav-item">
-            </div>
-          </div>
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/09/10/A-short-update/" rel="prev" title="A short update">
+      <i class="fa fa-chevron-left"></i> A short update
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2020/11/20/about-index-futures/" rel="next" title="About index futures">
+      About index futures <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
       </footer>
     
   </article>
@@ -292,11 +267,32 @@
   
   
 
-  </div>
 
 
           </div>
           
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
 
         </div>
           
@@ -326,8 +322,8 @@
 
       <div class="site-overview-wrap sidebar-panel">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
-  <img class="site-author-image" itemprop="image" alt="Oval_plus"
-    src="https://avatar.saraba1st.com/images/noavatar_small.gif">
+    <img class="site-author-image" itemprop="image" alt="Oval_plus"
+      src="https://avatar.saraba1st.com/images/noavatar_small.gif">
   <p class="site-author-name" itemprop="name">Oval_plus</p>
   <div class="site-description" itemprop="description"></div>
 </div>
@@ -336,20 +332,20 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">27</span>
+          <span class="site-state-item-count">29</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">8</span>
+        <span class="site-state-item-count">9</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">29</span>
+        <span class="site-state-item-count">33</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>
@@ -357,8 +353,7 @@
 
 
   <div class="links-of-blogroll motion-element">
-    <div class="links-of-blogroll-title">
-      <i class="fa fa-fw fa-link"></i>
+    <div class="links-of-blogroll-title"><i class="link fa-fw"></i>
       Links
     </div>
     <ul class="links-of-blogroll-list">
@@ -382,19 +377,18 @@
       <div class="footer-inner">
         
 
+        
+
 <div class="copyright">
   
   &copy; 
   <span itemprop="copyrightYear">2020</span>
   <span class="with-love">
-    <i class="fa fa-user"></i>
+    <i class="user"></i>
   </span>
   <span class="author" itemprop="copyrightHolder">Oval_plus</span>
 </div>
-  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a>
-  </div>
-  <span class="post-meta-divider">|</span>
-  <div class="theme-info">Theme – <a href="https://mist.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Mist</a>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://mist.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Mist</a>
   </div>
 
         
@@ -402,7 +396,7 @@
   <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
     <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
       <span class="post-meta-item-icon">
-        <i class="fa fa-user"></i>
+        <i class="user"></i>
       </span>
       <span class="site-uv" title="Total Visitors">
         <span id="busuanzi_value_site_uv"></span>
@@ -411,7 +405,7 @@
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
       <span class="post-meta-item-icon">
-        <i class="fa fa-eye"></i>
+        <i class="eye"></i>
       </span>
       <span class="site-pv" title="Total Views">
         <span id="busuanzi_value_site_pv"></span>
@@ -426,11 +420,6 @@
 
 
 
-
-
-
-
-        
       </div>
     </footer>
   </div>
@@ -458,11 +447,6 @@
 
 
 
-
-
-
-
-  
 
   
 
