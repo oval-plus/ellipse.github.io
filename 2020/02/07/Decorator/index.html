@@ -1,0 +1,587 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"yoursite.com","root":"/","scheme":"Mist","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"hide","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="学了个装饰器，还顺便学了描述器。赶紧记一下，免得以后还得重头debug。装饰器是设计模式的一种，但是在Python里有个专门的语法糖，效果和设计模式里的装饰器模式差不太多，但是写起来门道还挺多的。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Decorator &amp; Decorator Pattern (1)">
+<meta property="og:url" content="http://yoursite.com/2020/02/07/Decorator/index.html">
+<meta property="og:site_name" content="Plus of Oval">
+<meta property="og:description" content="学了个装饰器，还顺便学了描述器。赶紧记一下，免得以后还得重头debug。装饰器是设计模式的一种，但是在Python里有个专门的语法糖，效果和设计模式里的装饰器模式差不太多，但是写起来门道还挺多的。">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2020-02-07T09:21:17.000Z">
+<meta property="article:modified_time" content="2020-02-07T09:21:17.000Z">
+<meta property="article:author" content="Oval_plus">
+<meta property="article:tag" content="Python">
+<meta property="article:tag" content="Decorator">
+<meta property="article:tag" content="Descriptor">
+<meta property="article:tag" content="Decorator Pattern">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://yoursite.com/2020/02/07/Decorator/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+
+  <title>Decorator & Decorator Pattern (1) | Plus of Oval</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Plus of Oval</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="archive fa-fw"></i>Archives</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="user fa-fw"></i>About</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="tags fa-fw"></i>Tags</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="th fa-fw"></i>Categories</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/02/07/Decorator/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://avatar.saraba1st.com/images/noavatar_small.gif">
+      <meta itemprop="name" content="Oval_plus">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Plus of Oval">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Decorator & Decorator Pattern (1)
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2020-02-07 17:21:17" itemprop="dateCreated datePublished" datetime="2020-02-07T17:21:17+08:00">2020-02-07</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Toys/" itemprop="url" rel="index"><span itemprop="name">Toys</span></a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="Views" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="eye"></i>
+              </span>
+              <span class="post-meta-item-text">Views: </span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>学了个装饰器，还顺便学了描述器。赶紧记一下，免得以后还得重头debug。<br>装饰器是设计模式的一种，但是在Python里有个专门的语法糖，效果和设计模式里的装饰器模式差不太多，但是写起来门道还挺多的。    </p>
+<span id="more"></span>
+<h1 id="装饰器"><a href="#装饰器" class="headerlink" title="装饰器"></a>装饰器</h1><p>装饰器的作用  </p>
+<blockquote>
+<p>装饰器是用来装饰的啦，在原有的对象基础上包一层  </p>
+</blockquote>
+<p>大概就是这个意思，在不修改原来对象的代码的基础上，动态地修改原来对象的某些功能。</p>
+<p>装饰器的用法也不是很难，可以用函数定义装饰器，也可以用类定义装饰器。同样，装饰器既可以装饰类，也可以装饰函数。这都没什么问题。  </p>
+<p>总之先写一个简单的装饰器吧，要实现的功能是在茶的价格上加上冰的价格, 冰的价格是0.5。如果茶的价格是x，那么茶+冰的价格就应该是x+0.5。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">ice</span>(<span class="params">fn</span>):</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">wraps</span>(<span class="params">*args</span>):</span></span><br><span class="line">        new_price = fn(*args) + <span class="number">0.5</span></span><br><span class="line">        <span class="keyword">return</span> new_price</span><br><span class="line">    <span class="keyword">return</span> wraps</span><br><span class="line"></span><br><span class="line"><span class="meta">@ice</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">tea</span>(<span class="params">price</span>):</span></span><br><span class="line">    <span class="keyword">return</span> price</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(tea(<span class="number">15</span>))</span><br><span class="line">```  </span><br><span class="line">这就说明，装饰器是ice，传入的是fn，而传出的就变成wraps函数啦。  </span><br><span class="line"></span><br><span class="line">这个装饰器比较简单的原因是，装饰器本身没参数，而且也是函数装饰函数，要考虑的东西比较少。嘛，也是有可以写的很妙的装饰器的，下面这个就是个例子。这个例子里出现了functools.wraps，后面会讲一下。</span><br><span class="line"></span><br><span class="line"><span class="comment">## 装饰器版斐波那契数列： ##</span></span><br><span class="line">```python  </span><br><span class="line"><span class="keyword">from</span> functools <span class="keyword">import</span> wraps</span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">decorator</span>(<span class="params">fn</span>):</span></span><br><span class="line">    queue = &#123;&#125; </span><br><span class="line">    <span class="comment"># 创建空字典。将第x个数作为键，将处在那个位置的斐波那契数作为对应键的字典值。</span></span><br><span class="line">    miss = <span class="built_in">object</span>() <span class="comment"># 对象</span></span><br><span class="line"></span><br><span class="line"><span class="meta">    @wraps(<span class="params">fn</span>)</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">wrapper</span>(<span class="params">*args</span>):</span> <span class="comment"># decorator装饰器本体</span></span><br><span class="line">        result = queue.get(args, miss) </span><br><span class="line">        <span class="keyword">if</span> result <span class="keyword">is</span> miss: </span><br><span class="line">            <span class="comment"># 如果在空字典中第x个数为键的对应值不存在，那么</span></span><br><span class="line">            queue[args] = fn(*args) <span class="comment"># 运行函数</span></span><br><span class="line">            result = queue[args]</span><br><span class="line">        <span class="keyword">return</span> result <span class="comment"># 给出答案</span></span><br><span class="line">    </span><br><span class="line">    <span class="keyword">return</span> wrapper</span><br><span class="line"></span><br><span class="line"><span class="meta">@decorator</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">fib</span>(<span class="params">n</span>):</span></span><br><span class="line">    <span class="string">&#x27;&#x27;&#x27;计算斐波那契数列，n是需要算出的第n+1个斐波那契数，因为第0个是斐波那契数列中的第1个数&#x27;&#x27;&#x27;</span></span><br><span class="line">    <span class="keyword">if</span> n &lt; <span class="number">2</span>: <span class="comment"># 算fib(0), fib(1)的结果</span></span><br><span class="line">        <span class="keyword">return</span> n</span><br><span class="line">    <span class="keyword">return</span> fib(n - <span class="number">1</span>) + fib(n - <span class="number">2</span>)</span><br><span class="line">```  </span><br><span class="line"></span><br><span class="line"><span class="comment">## functools.wraps ##</span></span><br><span class="line">其实functools.wraps的内容看源码就足够了，这里有个知乎专栏可以辅助阅读：[Python functools.wraps 深入理解](https://zhuanlan.zhihu.com/p/<span class="number">45535784</span>)  </span><br><span class="line">简单概括一下就是：  </span><br><span class="line">&gt; - wraps函数在传入后，会以partial对象传出。  </span><br><span class="line">&gt; - 而partial会生成一个新可调用对象（这里的名字是wrapper），执行这个可调用对象时，会执行被包装函数（在这里是fib函数）的功能，参数则是装饰器的参数+被包装函数的原来的参数。  </span><br><span class="line">&gt; - 将被包装函数的属性拷贝给wrapper时，使用的函数名是update_wrapper，也就是partial的第一个参数。  </span><br><span class="line">  </span><br><span class="line">所以流程就是：</span><br><span class="line">&gt;  - 一个fib函数</span><br><span class="line">&gt;  - 执行decorator装饰器</span><br><span class="line">&gt;  - 创建字典blabla</span><br><span class="line">&gt;  - 将被包装函数(fib)传入wraps装饰器内，经过了partial内部的update_wrapper函数处理，将fib的属性拷贝到了装饰器内的函数，即wrapper上。</span><br><span class="line">&gt;  - 把fib函数指向wrapper函数</span><br><span class="line">&gt;  - 这样调用fib函数时，其实就是在调用经过partial处理的wrapper函数了。  </span><br><span class="line"></span><br><span class="line">说来说去，最关键的还是：</span><br><span class="line">**functools.wraps 旨在消除装饰器对原函数造成的影响，即对原函数的相关属性进行拷贝，已达到装饰器不修改原函数的目的。**  </span><br><span class="line">放在这个例子就是这一步：```queue[args] = fn(*args)```  </span><br><span class="line"></span><br><span class="line">functools.lru_cache()也能完成这一步。直接这样就行了：  </span><br><span class="line">```python  </span><br><span class="line"><span class="keyword">from</span> functools <span class="keyword">import</span> lru_cache</span><br><span class="line"><span class="meta">@lru_cache(<span class="params">maxsize=<span class="literal">None</span></span>)</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">fib</span>(<span class="params">n</span>):</span></span><br><span class="line">    <span class="keyword">if</span> n &lt; <span class="number">2</span>:</span><br><span class="line">        <span class="keyword">return</span> n</span><br><span class="line">    <span class="keyword">return</span> fib(n-<span class="number">1</span>) + fib(n-<span class="number">2</span>)</span><br></pre></td></tr></table></figure>
+<p>还比上面那个自己写的更优越，因为该装饰器提供了一个用于清理/使缓存失效的函数cache_clear()</p>
+<h2 id="带参数装饰器"><a href="#带参数装饰器" class="headerlink" title="带参数装饰器"></a>带参数装饰器</h2><p>主要还是多加一层，将装饰器的参数放到最外面。依然还是茶+冰的例子，但这次可以对冰的价格和名称进行改写了。这里不需要@wraps(fn)的原因是，这里的args不是被包装函数的参数，而是装饰器的参数。</p>
+<pre><code class="python"><span class="function"><span class="keyword">def</span> <span class="title">yiceng</span><span class="params">(*args, **kwargs)</span>:</span>
+    <span class="function"><span class="keyword">def</span> <span class="title">ice</span><span class="params">(fn)</span>:</span>
+        price = args[<span class="number">0</span>]
+        name = args[<span class="number">1</span>]
+        <span class="function"><span class="keyword">def</span> <span class="title">wrapper</span><span class="params">(*args)</span>:</span>
+            new_price = fn(*args)[<span class="number">0</span>] + price
+            new_name = fn(*args)[<span class="number">1</span>] + str(name)
+            <span class="keyword">return</span> new_price, new_name
+        <span class="keyword">return</span> wrapper
+    <span class="keyword">return</span> ice
+
+<span class="meta">@yiceng(0.2, '+ ice')</span>
+<span class="function"><span class="keyword">def</span> <span class="title">tea</span><span class="params">(price, name)</span>:</span>
+    <span class="keyword">return</span> price, name
+
+print(tea(<span class="number">15</span>, <span class="string">'black tea'</span>))</code></pre>
+<p>输出结果应该是： (15.2, ‘black tea+ ice’)   </p>
+<h2 id="用类写装饰器"><a href="#用类写装饰器" class="headerlink" title="用类写装饰器"></a>用类写装饰器</h2><p>就是在这里遇到了麻烦。</p>
+<h3 id="不带参数的用类写的装饰器"><a href="#不带参数的用类写的装饰器" class="headerlink" title="不带参数的用类写的装饰器"></a>不带参数的用类写的装饰器</h3><p>这里展示的是用类写的不带参数的装饰器，但是装饰的不是函数，而是类里的函数。这是一个捕获鱼类里的鲈鱼函数错误的装饰器，代码见下：</p>
+<pre><code class="python"><span class="class"><span class="keyword">class</span> <span class="title">Seasons</span><span class="params">(object)</span>:</span>
+    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, func)</span>:</span>
+        self.func = func 
+
+    <span class="function"><span class="keyword">def</span> <span class="title">__call__</span><span class="params">(self, *args, **kwargs)</span>:</span>
+        <span class="string">'''</span>
+<span class="string">        self: 表明__call__对象本身  </span>
+<span class="string">        __call__:  调用真正的装饰方法</span>
+<span class="string">        *args和**kwargs都是func的参数</span>
+<span class="string">        '''</span>
+        print(<span class="string">'函数调用CALL'</span>)
+        <span class="keyword">try</span>:
+            <span class="keyword">return</span> self.func(*args, **kwargs)
+        <span class="keyword">except</span> Exception <span class="keyword">as</span> e:          
+            traceback.print_exc()
+
+<span class="class"><span class="keyword">class</span> <span class="title">fish</span><span class="params">(object)</span>:</span>
+    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, id)</span>:</span>
+        self.id = id
+
+<span class="meta">    @Seasons</span>
+    <span class="function"><span class="keyword">def</span> <span class="title">perch</span><span class="params">(self, name)</span>:</span>
+        result = name + str(self.id)
+        <span class="keyword">return</span> result
+
+print(fish(<span class="number">123</span>).perch(fish(<span class="number">123</span>),<span class="string">'hh'</span>))</code></pre>
+<p>虽然是网上最常见的写法，但是这么写，就有点冗余ww主要是在最后输出那一段，嗯……要引用self（即fish(123))，因为是从经过Seasons包裹后的perch中去访问的，而Seasons是一个单独的类，所以就要反复引用self了。还有一种更加好的写法。</p>
+<pre><code class="python"><span class="class"><span class="keyword">class</span> <span class="title">Seasons</span><span class="params">(object)</span>:</span>
+    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, func)</span>:</span> 
+        self.func = func
+
+    <span class="function"><span class="keyword">def</span> <span class="title">__get__</span><span class="params">(self, instance, owner)</span>:</span>
+        <span class="string">'''</span>
+<span class="string">        instance: 代表实例，perch函数中的self</span>
+<span class="string">        owner: 代表类本身，fish类</span>
+<span class="string">        '''</span>
+        <span class="comment"># 没有self.owner_原因详细见下</span>
+        self.instance_ = instance
+        <span class="keyword">return</span> self
+
+    <span class="function"><span class="keyword">def</span> <span class="title">__call__</span><span class="params">(self, *args, **kwargs)</span>:</span>
+        <span class="string">'''</span>
+<span class="string">        self: 表明__call__对象本身  </span>
+<span class="string">        __call__:  调用真正的装饰方法</span>
+<span class="string">        *args和**kwargs都是func的参数</span>
+<span class="string">        '''</span>
+        print(<span class="string">'函数调用CALL'</span>)
+        <span class="keyword">try</span>:
+            <span class="keyword">return</span> self.func(self.instance_, *args, **kwargs) 
+            <span class="comment"># 这里的self.instance_相当于fish里的self</span>
+        <span class="keyword">except</span> Exception <span class="keyword">as</span> e:          
+            traceback.print_exc()
+
+<span class="class"><span class="keyword">class</span> <span class="title">fish</span><span class="params">(object)</span>:</span>
+    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, id)</span>:</span>
+        self.id = id
+
+<span class="meta">    @Seasons</span>
+    <span class="function"><span class="keyword">def</span> <span class="title">perch</span><span class="params">(self, name)</span>:</span>
+        result = name + str(self.id)
+        <span class="keyword">return</span> result
+
+print(fish(<span class="number">123</span>).perch(<span class="string">'hh'</span>))</code></pre>
+<p>输出结果就是”hh123”.<br>为什么不写self.owner = owner：<br>因为fish类在被装饰的函数里没有被套用，也就是说这个装饰器不是个装饰类的装饰器，只是用来装饰函数的，所以不需要写self.owner来添加属性，因为根本没用。但因为它是用来装饰类里的函数的，所以需要一个owner来申明。  </p>
+<p>这个装饰器思路就已经很描述器了。该有的要素都差不多了。事实上Descriptor也可以作高级版的装饰器，但我还没太搞明白，就先不记录下来了。  </p>
+<h3 id="带参数的用类写的装饰器"><a href="#带参数的用类写的装饰器" class="headerlink" title="带参数的用类写的装饰器"></a>带参数的用类写的装饰器</h3><p>接下来还是用类写装饰器，但是是带参数的。做鱼的姿势，清蒸鲈鱼+蒜。（有一说一，清蒸鲈鱼加蒜应该不好吃）自己设置调料的价格和调料的种类。输入变量是，鱼的id（在fish类里），调料的名称与价格（在类的属性里），最后输出的应该是 鱼id+鱼的做法+调料名称，鱼的价格+调料的价格。（馋了</p>
+<pre><code class="python"><span class="class"><span class="keyword">class</span> <span class="title">Seasons</span><span class="params">(object)</span>:</span>
+    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, name, price)</span>:</span> 
+        self.name = name
+        self.price = price
+
+    <span class="function"><span class="keyword">def</span> <span class="title">__call__</span><span class="params">(self, func)</span>:</span>
+        <span class="string">'''</span>
+<span class="string">        self: 表明__call__对象本身  </span>
+<span class="string">        __call__:  调用真正的装饰方法</span>
+<span class="string">        *args和**kwargs都是func的参数</span>
+<span class="string">        '''</span>
+        print(<span class="string">'函数调用CALL'</span>)
+        <span class="function"><span class="keyword">def</span> <span class="title">wrapped</span><span class="params">(*args, **kwargs)</span>:</span>
+            <span class="keyword">try</span>:
+                new_name = func(*args, **kwargs)[<span class="number">0</span>] + self.name
+                new_price = func(*args, **kwargs)[<span class="number">1</span>] + self.price
+                <span class="keyword">return</span> new_name, new_price 
+            <span class="keyword">except</span> Exception <span class="keyword">as</span> e:          
+                traceback.print_exc()
+        <span class="keyword">return</span> wrapped
+
+<span class="class"><span class="keyword">class</span> <span class="title">fish</span><span class="params">(object)</span>:</span>
+    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, id)</span>:</span>
+        self.id = id
+
+<span class="meta">    @Seasons(name = 'garlic', price = 1)</span>
+    <span class="function"><span class="keyword">def</span> <span class="title">perch</span><span class="params">(self, cooking, price)</span>:</span>
+        cooking = str(self.id) + cooking
+        <span class="keyword">return</span> cooking, price
+
+print(fish(<span class="number">123</span>).perch(<span class="string">'steamed'</span>, <span class="number">50</span>))
+<span class="comment"># ('123steamedgarlic', 51)</span></code></pre>
+<p>当然也是有描述器式的编写模式的，但是，如果仅靠自己硬写，不依赖任何库的话，反而使代码变得繁琐。原因在于在获得了实例的self后，在调用装饰器的模块时，也就是<code>def __call__(self, func, *args, **kwargs):</code>中依然没办法调取实例的self。所以怎么办呢？聪明的程序员们想出了object_proxy，也就是套娃装饰器：<br>先套一层object_proxy，把被装饰函数(wrapped)的名称与self扒下来，然后创建一个object_proxy子类(bound_function_wrapper)，获得object_proxy的一切属性，并且新建一个装饰器本体函数作为属性（也就是wrapper，换句话说就是你想让装饰器实现的功能）。然后再新建一个继承了object_proxy的子类(function_wrapper)，去获得上一个子类的所有东西，并输出你想要的wrapper。非常复杂，而且为了考虑wrapped的多种情况与wrapper的相合度，指不定您还得再写个装饰器去搞定function_wrapper…  </p>
+<p>所以啊…有一个库……叫做wrapt，很爽，可以爽爽。但是具体怎么爽我还没搞懂，而且这篇博客也有点太长了，类装饰器和装饰器模式之类的，下次再写吧。</p>
+<h1 id="参考文献"><a href="#参考文献" class="headerlink" title="参考文献"></a>参考文献</h1><p>一个讲座，我没太看明白：<a target="_blank" rel="noopener" href="https://www.youtube.com/watch?v=W7Rv-km3ZuA">Advanced methods for creating decorators</a>这几天想办法看看明白然后再水一篇博客吧。<br>一个超级酷炫的blog，主讲人写的：<a target="_blank" rel="noopener" href="https://github.com/GrahamDumpleton/wrapt">wrapt</a><br>cookbook它不香吗？<a target="_blank" rel="noopener" href="https://python3-cookbook.readthedocs.io/zh_CN/latest/c09/p09_define_decorators_as_classes.html">Python3 Cookbook</a><br>functools官方文档。<a target="_blank" rel="noopener" href="https://docs.python.org/zh-cn/3/library/functools.html">docs.python.org/functools</a></p>
+<p>2020/02/09  </p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Python/" rel="tag"># Python</a>
+              <a href="/tags/Decorator/" rel="tag"># Decorator</a>
+              <a href="/tags/Descriptor/" rel="tag"># Descriptor</a>
+              <a href="/tags/Decorator-Pattern/" rel="tag"># Decorator Pattern</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/02/04/xpath-spider/" rel="prev" title="xpath爬虫相关">
+      <i class="fa fa-chevron-left"></i> xpath爬虫相关
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2020/02/09/Decorator-Decorator-Pattern-2/" rel="next" title="Decorator & Decorator Pattern (2)">
+      Decorator & Decorator Pattern (2) <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%A3%85%E9%A5%B0%E5%99%A8"><span class="nav-number">1.</span> <span class="nav-text">装饰器</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B8%A6%E5%8F%82%E6%95%B0%E8%A3%85%E9%A5%B0%E5%99%A8"><span class="nav-number">1.1.</span> <span class="nav-text">带参数装饰器</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%94%A8%E7%B1%BB%E5%86%99%E8%A3%85%E9%A5%B0%E5%99%A8"><span class="nav-number">1.2.</span> <span class="nav-text">用类写装饰器</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%8D%E5%B8%A6%E5%8F%82%E6%95%B0%E7%9A%84%E7%94%A8%E7%B1%BB%E5%86%99%E7%9A%84%E8%A3%85%E9%A5%B0%E5%99%A8"><span class="nav-number">1.2.1.</span> <span class="nav-text">不带参数的用类写的装饰器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%B8%A6%E5%8F%82%E6%95%B0%E7%9A%84%E7%94%A8%E7%B1%BB%E5%86%99%E7%9A%84%E8%A3%85%E9%A5%B0%E5%99%A8"><span class="nav-number">1.2.2.</span> <span class="nav-text">带参数的用类写的装饰器</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%8F%82%E8%80%83%E6%96%87%E7%8C%AE"><span class="nav-number">2.</span> <span class="nav-text">参考文献</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Oval_plus"
+      src="https://avatar.saraba1st.com/images/noavatar_small.gif">
+  <p class="site-author-name" itemprop="name">Oval_plus</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">31</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">10</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">35</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+
+
+  <div class="links-of-blogroll motion-element">
+    <div class="links-of-blogroll-title"><i class="link fa-fw"></i>
+      Links
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <a href="https://blog.sayuri.moe/" title="https:&#x2F;&#x2F;blog.sayuri.moe&#x2F;" rel="noopener" target="_blank">小百合的算术教室</a>
+        </li>
+    </ul>
+  </div>
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Oval_plus</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://mist.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Mist</a>
+  </div>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="user"></i>
+      </span>
+      <span class="site-uv" title="Total Visitors">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="eye"></i>
+      </span>
+      <span class="site-pv" title="Total Views">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>
