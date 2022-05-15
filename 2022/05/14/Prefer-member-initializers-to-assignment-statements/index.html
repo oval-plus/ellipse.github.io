@@ -20,12 +20,12 @@
     var CONFIG = {"hostname":"yoursite.com","root":"/","scheme":"Mist","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"hide","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
   </script>
 
-  <meta name="description" content="类通常有不止一个构造函数。随着时间的推移，类成员变量与构造函数很容易变得不同步。避免这种事情发生的最好方法就是在声明变量的时候就初始化它们，而不是在每个构造函数内部初始化它们。你应该对静态与实例变量都使用初始化器语法。在C#中，当你声明成员变量时就构造它们是很自然的。就，当你声明变量的时候，把它初始化： 12345public class MyClass&amp;#123;&#x2F;&#x2F; declare the c">
+  <meta name="description" content="类通常有不止一个构造函数。随着时间的推移，类成员变量与构造函数很容易变得不同步。避免这种事情发生的最好方法就是在声明变量的时候就初始化它们，而不是在每个构造函数内部初始化它们。你应该对静态与实例变量都使用初始化器语法。">
 <meta property="og:type" content="article">
 <meta property="og:title" content="优先考虑对成员初始化而不是仅仅声明语句">
 <meta property="og:url" content="http://yoursite.com/2022/05/14/Prefer-member-initializers-to-assignment-statements/index.html">
 <meta property="og:site_name" content="Plus of Oval">
-<meta property="og:description" content="类通常有不止一个构造函数。随着时间的推移，类成员变量与构造函数很容易变得不同步。避免这种事情发生的最好方法就是在声明变量的时候就初始化它们，而不是在每个构造函数内部初始化它们。你应该对静态与实例变量都使用初始化器语法。在C#中，当你声明成员变量时就构造它们是很自然的。就，当你声明变量的时候，把它初始化： 12345public class MyClass&amp;#123;&#x2F;&#x2F; declare the c">
+<meta property="og:description" content="类通常有不止一个构造函数。随着时间的推移，类成员变量与构造函数很容易变得不同步。避免这种事情发生的最好方法就是在声明变量的时候就初始化它们，而不是在每个构造函数内部初始化它们。你应该对静态与实例变量都使用初始化器语法。">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2022-05-14T13:34:59.000Z">
 <meta property="article:modified_time" content="2022-05-14T13:34:59.000Z">
@@ -219,7 +219,9 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <p>类通常有不止一个构造函数。随着时间的推移，类成员变量与构造函数很容易变得不同步。避免这种事情发生的最好方法就是在声明变量的时候就初始化它们，而不是在每个构造函数内部初始化它们。你应该对静态与实例变量都使用初始化器语法。<br>在C#中，当你声明成员变量时就构造它们是很自然的。就，当你声明变量的时候，把它初始化：</p>
+        <p>类通常有不止一个构造函数。随着时间的推移，类成员变量与构造函数很容易变得不同步。避免这种事情发生的最好方法就是在声明变量的时候就初始化它们，而不是在每个构造函数内部初始化它们。你应该对静态与实例变量都使用初始化器语法。  </p>
+<span id="more"></span> 
+<p>在C#中，当你声明成员变量时就构造它们是很自然的。就，当你声明变量的时候，把它初始化：</p>
 <figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title">MyClass</span></span><br><span class="line">&#123;</span><br><span class="line"><span class="comment">// declare the collection, and initialize it.</span></span><br><span class="line"><span class="function"><span class="keyword">private</span> <span class="title">List</span>&lt;<span class="title">string</span>&gt; labels</span> = <span class="keyword">new</span> List&lt;<span class="built_in">string</span>&gt;();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <p>无论你最终往<code>MyClass</code>类里加了多少构造函数，<code>labels</code>将在合适地被初始化。编译器为了执行所有被定义好的实例成员变量初始化器，它会在每个构造函数的开始的地方生成相关代码。当你添加一个新的构造函数，<code>labels</code>会被初始化。类似的，如果你新添了一个成员变量，你不需要给每个构造函数都添加上这个成员变量的初始化过程。在你定义变量的地方就把它初始化已经足够。同样重要的是，初始化器都被添加进了编译生成的默认构造函数了。C#编译器会为你的类们创建一个默认构造函数，无论你是否显式地定义了任何构造函数。<br>初始化器不仅仅是给构造函数主体中的语句构造提供了一个捷径。由初始化器生成的语句会被放在你的构造函数主体的对象代码之前。在类的基类构造函数被运行前，初始化器就运行了。并且初始化器会按照对应成员变量在类中被定义的前后顺序去运行。<br>使用初始化器是最简单的避免在类中出现未初始化变量的方法，但它并不完美。在三种情形下，你不应该使用初始化器语法。第一种就是当你将对象初始化为0或是null时。默认系统的初始化过程会在执行你的任何代码前就将任何东西都设为0。由系统生成的0的初始化是非常底层的，它使用了CPU命令的让整个区块的内存都置为0。任何额外的0初始化过程在这一部分都会变得多余。C#编译器会忠实地添加额外命令将内存再次设为0。这没错——只是低效罢了。事实上，当涉及到值类型时，这种操作十分低效。</p>
