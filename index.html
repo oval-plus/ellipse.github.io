@@ -160,6 +160,82 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2022/05/14/Prefer-member-initializers-to-assignment-statements/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://avatar.saraba1st.com/images/noavatar_small.gif">
+      <meta itemprop="name" content="Oval_plus">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Plus of Oval">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2022/05/14/Prefer-member-initializers-to-assignment-statements/" class="post-title-link" itemprop="url">优先考虑对成员初始化而不是仅仅声明语句</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2022-05-14 21:34:59" itemprop="dateCreated datePublished" datetime="2022-05-14T21:34:59+08:00">2022-05-14</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Effective-C/" itemprop="url" rel="index"><span itemprop="name">Effective C#</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>类通常有不止一个构造函数。随着时间的推移，类成员变量与构造函数很容易变得不同步。避免这种事情发生的最好方法就是在声明变量的时候就初始化它们，而不是在每个构造函数内部初始化它们。你应该对静态与实例变量都使用初始化器语法。<br>在C#中，当你声明成员变量时就构造它们是很自然的。就，当你声明变量的时候，把它初始化：</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title">MyClass</span></span><br><span class="line">&#123;</span><br><span class="line"><span class="comment">// declare the collection, and initialize it.</span></span><br><span class="line"><span class="function"><span class="keyword">private</span> <span class="title">List</span>&lt;<span class="title">string</span>&gt; labels</span> = <span class="keyword">new</span> List&lt;<span class="built_in">string</span>&gt;();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>无论你最终往<code>MyClass</code>类里加了多少构造函数，<code>labels</code>将在合适地被初始化。编译器为了执行所有被定义好的实例成员变量初始化器，它会在每个构造函数的开始的地方生成相关代码。当你添加一个新的构造函数，<code>labels</code>会被初始化。类似的，如果你新添了一个成员变量，你不需要给每个构造函数都添加上这个成员变量的初始化过程。在你定义变量的地方就把它初始化已经足够。同样重要的是，初始化器都被添加进了编译生成的默认构造函数了。C#编译器会为你的类们创建一个默认构造函数，无论你是否显式地定义了任何构造函数。<br>初始化器不仅仅是给构造函数主体中的语句构造提供了一个捷径。由初始化器生成的语句会被放在你的构造函数主体的对象代码之前。在类的基类构造函数被运行前，初始化器就运行了。并且初始化器会按照对应成员变量在类中被定义的前后顺序去运行。<br>使用初始化器是最简单的避免在类中出现未初始化变量的方法，但它并不完美。在三种情形下，你不应该使用初始化器语法。第一种就是当你将对象初始化为0或是null时。默认系统的初始化过程会在执行你的任何代码前就将任何东西都设为0。由系统生成的0的初始化是非常底层的，它使用了CPU命令的让整个区块的内存都置为0。任何额外的0初始化过程在这一部分都会变得多余。C#编译器会忠实地添加额外命令将内存再次设为0。这没错——只是低效罢了。事实上，当涉及到值类型时，这种操作十分低效。</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">MyValType myVal1; <span class="comment">// initialized to 0</span></span><br><span class="line">MyValType myVal2 = <span class="keyword">new</span> MyValType(); <span class="comment">// also 0</span></span><br></pre></td></tr></table></figure>
+<p>两个语句都将变量设为零。第一个通过将含有<code>myVal1</code>的内存设为0来实现。第二个语句则是使用了initobj指令表，这使得在<code>myVal2</code>变量中有box与unbox操作。而这将会消耗相当的时间。（参见第45条）<br>第二种低效的情形则是为相同的对象创建复数个的初始化过程。必须只对在所有构造函数中都使用相同初始化过程的变量使用初始化语法。这个版本的<code>MyClass</code>创建了两个不同的List对象来作为它构造函数的一部分：  </p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title">MyClass2</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="comment">// declare the collection, and initialize it.</span></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="title">List</span>&lt;<span class="title">string</span>&gt; labels</span> = <span class="keyword">new</span> List&lt;<span class="built_in">string</span>&gt;();</span><br><span class="line">    MyClass2()</span><br><span class="line">    &#123;</span><br><span class="line">    &#125;</span><br><span class="line">    MyClass2(<span class="built_in">int</span> size)</span><br><span class="line">    &#123;</span><br><span class="line">        labels = <span class="keyword">new</span> List&lt;<span class="built_in">string</span>&gt;(size);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>当你在创建一个新<code>MyClass2</code>时，指定了集合的大小，你就创建了两个数组。其中一个数组会立马成为垃圾，因为变量初始化器会在每个构造函数执行之前执行，而构造函数主体创建了第二个数组。编译器会创建以下版本的<code>MyClass2</code>，它并不是你手敲的。（为了更合理的应对这种情形，请参考第14条）</p>
+<figure class="highlight cs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title">MyClass2</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="comment">// declare the collection, and initialize it.</span></span><br><span class="line">    <span class="keyword">private</span> List&lt;<span class="built_in">string</span>&gt; labels;</span><br><span class="line">    MyClass2()</span><br><span class="line">    &#123;</span><br><span class="line">        labels = <span class="keyword">new</span> List&lt;<span class="built_in">string</span>&gt;();</span><br><span class="line">    &#125;</span><br><span class="line">    MyClass2(<span class="built_in">int</span> size)</span><br><span class="line">    &#123;</span><br><span class="line">        labels = <span class="keyword">new</span> List&lt;<span class="built_in">string</span>&gt;();</span><br><span class="line">        labels = <span class="keyword">new</span> List&lt;<span class="built_in">string</span>&gt;(size);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>当你使用隐式property时，你有可能会碰到同样的情形。（请见第1条）你的代码并没有权限去使用由编译器生成的backing field，所以你不能给隐式property使用初始化器。你的唯一选择就是用构造函数来初始化隐式property的数据。当你的data setter中没有校验逻辑的时候，使用隐式property仍然存在优势。如果你将隐式property迁移到命名了的，且显式编程好了的backing field后，你必须更新你的初始化代码，也就是使用初始化器去初始化数据成员，而不是用构造函数。对于使用隐式property为正确选择的数据成员来说，第14条将会展示在初始化隐式property时，如何减少冗余代码。<br>将初始化放到构造函数主体的最后一条理由是它能够帮助处理异常。你不能将初始化器放进一个<code>try</code>代码块中。任何在构建成员变量中可能会产生的异常会被抛出到对象外面去。你不能对类内发生的异常进行任何修复。你必须将这初始化器代码挪到构造函数主体内，这样才可以合体地修复异常来创建类，并且优雅地控制住这些异常。（见第47条）<br>最简单的保证类内成员变量被初始化了，并且不用管构造函数是否被执行了的方法就是使用成员初始化器。初始化器会在你为类所写的每个构造函数执行前被执行。使用这个语法意味着你不可以忘记在你以后为新版本添加新构造函数时，添加上合适的初始化过程。当所有的构造函数都使用同样的方式创建成员变量时，使用初始化器。这会更利于可读，也更容易维护。</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2021/10/07/Prefer-Query-Syntax-to-Loops/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -671,84 +747,10 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/06/15/Yesterday%20wo%20utatte/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="https://avatar.saraba1st.com/images/noavatar_small.gif">
-      <meta itemprop="name" content="Oval_plus">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Plus of Oval">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/06/15/Yesterday%20wo%20utatte/" class="post-title-link" itemprop="url">昨日之歌二三事</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2020-06-15 00:17:02" itemprop="dateCreated datePublished" datetime="2020-06-15T00:17:02+08:00">2020-06-15</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/TV-Anime/" itemprop="url" rel="index"><span itemprop="name">TV Anime</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>突然想到了就写写。  </p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2020/06/15/Yesterday%20wo%20utatte/#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
-    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><span class="space">&hellip;</span><a class="page-number" href="/page/4/">4</a><a class="extend next" rel="next" href="/page/2/"><i class="fa fa-angle-right" aria-label="Next page"></i></a>
+    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><span class="space">&hellip;</span><a class="page-number" href="/page/5/">5</a><a class="extend next" rel="next" href="/page/2/"><i class="fa fa-angle-right" aria-label="Next page"></i></a>
   </nav>
 
 
@@ -816,7 +818,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">32</span>
+          <span class="site-state-item-count">33</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -866,7 +868,7 @@
 <div class="copyright">
   
   &copy; 
-  <span itemprop="copyrightYear">2021</span>
+  <span itemprop="copyrightYear">2022</span>
   <span class="with-love">
     <i class="user"></i>
   </span>
