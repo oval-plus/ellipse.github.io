@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"yoursite.com","root":"/","scheme":"Mist","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"hide","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="使用值类型还是引用类型？使用struct还是class？什么时候应该使用哪个？这并不是C++，在C++中所有的类型都定义成值类型并可以给它们创建引用。这也不是JAVA，在JAVA中一切都是引用类型（除非你是JAVA的语言设计者之一）。你必须在你创建出所有实例的类型时就决定好这些实例类型将会作何表现。你必须忍受你的做出的决定的后果，因为在后期改变他们会引发一些微妙的代码中断。选用struct关键字来">
+<meta property="og:type" content="article">
+<meta property="og:title" content="辨清值类型与引用类型">
+<meta property="og:url" content="http://yoursite.com/2022/05/16/Distinguish-Between-Value-Types-and-Reference-Types/index.html">
+<meta property="og:site_name" content="Plus of Oval">
+<meta property="og:description" content="使用值类型还是引用类型？使用struct还是class？什么时候应该使用哪个？这并不是C++，在C++中所有的类型都定义成值类型并可以给它们创建引用。这也不是JAVA，在JAVA中一切都是引用类型（除非你是JAVA的语言设计者之一）。你必须在你创建出所有实例的类型时就决定好这些实例类型将会作何表现。你必须忍受你的做出的决定的后果，因为在后期改变他们会引发一些微妙的代码中断。选用struct关键字来">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2022-05-16T13:34:59.000Z">
+<meta property="article:modified_time" content="2022-05-16T13:34:59.000Z">
+<meta property="article:author" content="Oval_plus">
+<meta property="article:tag" content="Language Idioms">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://yoursite.com/2022/05/16/Distinguish-Between-Value-Types-and-Reference-Types/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+
+  <title>辨清值类型与引用类型 | Plus of Oval</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Plus of Oval</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="archive fa-fw"></i>Archives</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="user fa-fw"></i>About</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="tags fa-fw"></i>Tags</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="th fa-fw"></i>Categories</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2022/05/16/Distinguish-Between-Value-Types-and-Reference-Types/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://avatar.saraba1st.com/images/noavatar_small.gif">
+      <meta itemprop="name" content="Oval_plus">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Plus of Oval">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          辨清值类型与引用类型
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2022-05-16 21:34:59" itemprop="dateCreated datePublished" datetime="2022-05-16T21:34:59+08:00">2022-05-16</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Effective-C/" itemprop="url" rel="index"><span itemprop="name">Effective C#</span></a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="Views" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="eye"></i>
+              </span>
+              <span class="post-meta-item-text">Views: </span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>使用值类型还是引用类型？使用struct还是class？什么时候应该使用哪个？这并不是C++，在C++中所有的类型都定义成值类型并可以给它们创建引用。这也不是JAVA，在JAVA中一切都是引用类型（除非你是JAVA的语言设计者之一）。你必须在你创建出所有实例的类型时就决定好这些实例类型将会作何表现。你必须忍受你的做出的决定的后果，因为在后期改变他们会引发一些微妙的代码中断。选用<code>struct</code>关键字来创建类还是<code>class</code>关键字来创建类是个简单的问题，但如果你后期改了它的话，将所有使用这个类的客户端都进行更新则需要更多的工作。  </p>
+<span id="more"></span> 
+<p>这并不是偏爱哪一方那么简单的问题。这由你如何期待使用这个新类来决定什么哪个选择是正确的。值类型不是多态的。它们更适用于储存你的应用所操作的数据。引用类型可以是多态的，而且必须被用来定义应用的行为。考虑考虑新类的将要承担的职责，并从这些职责中决定创建哪一种类型。struct储存数据，而class定义行为。<br>值类型与引用类型的区别被添加进.NET与C#是因为C++与JAVA中的一些共性问题。在C++中，所有的参数与返回值都以值的形式传递。以值传递非常高效，但是它的代价是：部分拷贝（有的时候叫它分割对象）。如果你使用了一个派生类，而期望得到它的基类时，只有基类的部分会被拷贝。事实上，你丢失了所有有关曾有一个派生类存在的信息。甚至使用虚函数也会收到基类的信息。<br>JAVA处理这种情况的方式是，大体上去除了值类型。所有用户自定义的类型都是引用类型。在JAVA中，所有的参数与返回值都是以引用来传递的。这个策略的优势在于持续性，但是在性能上则有缺陷。面对它吧，有一些类不是堕胎的——它们就不是为了多态而设计的。JAVA程序员们要给每一个变量都用一个堆来分配内存，还要用一个最终垃圾回收器来回收内存。这些都会在解引用的时候花费额外的时间。每一个变量都是引用。在C#中，你声明的新类是一个值类型还是一个引用类型是由struct与class关键字决定的。值类型必须是小，体量轻的类型。引用类型这是由类的层级来构建的。这一节会检查对类的不同用法，这样你就能够明白值类型与引用类型的区别了。<br>首先，这个类会被作为一个方法的返回值。</p>
+<figure class="highlight cs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> MyData myData;</span><br><span class="line"><span class="function"><span class="keyword">public</span> MyData <span class="title">Foo</span>(<span class="params"></span>)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">return</span> myData;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// call it:</span></span><br><span class="line">MyData v = Foo();</span><br><span class="line">TotalSum += v.Value;</span><br></pre></td></tr></table></figure>
+<p>如果<code>MyData</code>是一个值类型，那么返回值会得到<code>v</code>在内存中的拷贝值。然而，如果<code>MyData</code>是一个引用类型，那么你就是在把一个引用输出给内部变量，这就违反了封装的原则。（见第26条）<br>或者，考虑这种变量：</p>
+<figure class="highlight cs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> MyData <span class="title">Foo2</span>(<span class="params"></span>)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">return</span> myData.CreateCopy();</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// call it:</span></span><br><span class="line">MyData v = Foo();</span><br><span class="line">TotalSum += v.Value;</span><br></pre></td></tr></table></figure>
+<p>现在，<code>v</code>是原来的<code>myData</code>的一个拷贝了。作为引用类型，两个对象被创建在堆里了。不再存在把内部数据暴露出去的问题了，而是在堆里创建了一个额外的对象。如果v是一个本地变量，那么它很快就会变成垃圾而Clone则会强制使用运行时类型检查。总而言之，这是低效的。<br>通过public方法与property来输出数据的类必须是值变量。但是这也不是说每个从public成员返回回来的类都必须是值类型。对于上面代码片段来说，我们假设MyData是起到了储存值的作用。它的职责就是储存这些值。<br>但是，考虑以下这个另外的代码片段：</p>
+<figure class="highlight cs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> MyType myType;</span><br><span class="line"><span class="function"><span class="keyword">public</span> IMyInterface <span class="title">Foo3</span>(<span class="params"></span>)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">return</span> myType <span class="keyword">as</span> IMyInterface;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// call it:</span></span><br><span class="line">IMyInterface iMe = Foo3();</span><br><span class="line">iMe.DoWork();</span><br></pre></td></tr></table></figure>
+<p>myType变量仍然是从Foo3方法中被返回出来。但是这一次，对象是从一个定义了的接口的地方被invoke得到，而不是直接从返回值内的数据得到。接手MyType对象时不是为了它的数据内容物，而是为了这个行为本身。这个行为是通过IMyInterface来表现的，而这可以被许多不同的类继承。在这个例子中，MyType必须是一个引用类型，而不是一个值类型。MyType的职责是围绕着它的行为展开，而不是围绕着它的数据成员进行的。<br>上面那个简单的代码片段开始给你展示了区别：值类型储存了数值，而引用类型定义了行为。现在来稍微深入一点了解这些类型是如何储存在内存里，以及一些与存储模型相关的性能考量。例如这个类型；</p>
+<figure class="highlight cs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title">C</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">private</span> MyType a = <span class="keyword">new</span> MyType();</span><br><span class="line">    <span class="keyword">private</span> MyType b = <span class="keyword">new</span> MyType();</span><br><span class="line">    <span class="comment">// Remaining implementation removed.</span></span><br><span class="line">&#125; </span><br><span class="line"></span><br><span class="line">C cThing = <span class="keyword">new</span> C()</span><br></pre></td></tr></table></figure>
+<p>有多少个对象会被创建？它们有多大？这要看情况了。如果MyType是一个值类型，那么你就做了一次分配。分配的大小则是MyType大小的两倍。然而，如果MyType是一个引用类型，你就做了三次分配：一次是分给C这个对象的，是8个比特（假设是32位的指针）。其他两个是给在C这个对象中的每个MyType对象的。这不同的结果是因为值类型是被内联地存在一个对象中的，而引用类型则不是。每个引用类型都拥有一份引用，所以内存需要额外的分配。<br>为了说的更明白一点，看看下面这种分配：</p>
+<figure class="highlight cs"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">MyType[] arrayOfTypes = <span class="keyword">new</span> MyType[<span class="number">100</span>];</span><br></pre></td></tr></table></figure>
+<p>如果MyType是值类型，会在一个内存空间分配里分配了100份MyType大小的内存。然而，如果MyType是一个引用类型，只会出现一次分配。数组中的每一个元素都是null。当初始化数组中的每个元素时，就会有101次分配——101次分配要比1次分配化的时间多。分配许多引用类型会让堆变得碎片化，并且运行速度变慢。如果你在创建类型时就打算让它去储存数据的值的话，值类型就是你需要的。<br>创建一个值类型还是引用类型是一个很重要的决定，因为将值类型改成引用类型会产生深远的变化。看看下面这个例子：  </p>
+<figure class="highlight cs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">struct</span> Employee</span><br><span class="line">&#123;</span><br><span class="line">    <span class="comment">// Properties elided</span></span><br><span class="line">    <span class="keyword">public</span> <span class="built_in">string</span> Position</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">get</span>;</span><br><span class="line">        <span class="keyword">set</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">public</span> <span class="built_in">decimal</span> CurrentPayAmount</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">get</span>;</span><br><span class="line">        <span class="keyword">set</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">Pay</span>(<span class="params">BankAccount b</span>)</span></span><br><span class="line">    &#123;</span><br><span class="line">        b.Balance += CurrentPayAmount;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这是一个简单类里放了一个方法，用来给你的员工发薪水。时间过去了，而系统运行的挺好。然后你决定给雇员们整点不同的class：销售人员会获得佣金，而经理们则会得到奖金。你决定把Employee类变成一个class：</p>
+<figure class="highlight cs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title">Employee2</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="comment">// Properties elided</span></span><br><span class="line">    <span class="keyword">public</span> <span class="built_in">string</span> Position</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">get</span>;</span><br><span class="line">        <span class="keyword">set</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">public</span> <span class="built_in">decimal</span> CurrentPayAmount</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">get</span>;</span><br><span class="line">        <span class="keyword">set</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">virtual</span> <span class="keyword">void</span> <span class="title">Pay</span>(<span class="params">BankAccount b</span>)</span></span><br><span class="line">    &#123;</span><br><span class="line">        b.Balance += CurrentPayAmount;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这会令你相当一部分使用了你的自定义结构的现有代码失效，原来是返回值，现在是返回引用。原来是参数是以值传递，现在则是以引用传递。以下这一小节代码的行为则会被完全改变：</p>
+<figure class="highlight cs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Employee e1 = Employees.Find(e =&gt; e.Position == <span class="string">&quot;CEO&quot;</span>);</span><br><span class="line">BankAccount CEOBankAccount = <span class="keyword">new</span> BankAccount();</span><br><span class="line"><span class="built_in">decimal</span> Bonus = <span class="number">10000</span>;</span><br><span class="line">e1.CurrentPayAmount += Bonus; <span class="comment">// Add one time bonus.</span></span><br><span class="line">e1.Pay(CEOBankAccount);</span><br></pre></td></tr></table></figure>
+<p>仅仅是一次性的薪资奖励会变成永久的加薪。本来使用的是复制出来的值，而现在则使用的是引用。编译器会很高兴地完成这些改动，CEO也许也会很开心。而CFO，则会报一个bug。事后，你就是很难改变关于值与引用类型的想法：它改变了行为。<br>这个问题会出现，是因为Employee类型不再遵循值类型的守则。除了保存employee中的数据元素，你还给它添加了职责——在这个例子中，就是给员工发钱。职责是class的领域。class可以轻易给相同职责的多态实现进行定义，而struct则不行，并且必须只限制在储存值之中。<br>.NET的文档推荐将类的大小作为决定选择值类型还是引用类型的决定性要素。事实上，有一个更好的要素可以作为选择用哪个类的参考。类被用作简单结构或仅仅是数据搬运工的，是值类型的完美候选人。值变量在内存管理上更高效是确凿无疑的：更少的堆的碎片化，更少的垃圾，以及更少的间接操作。更重要的是，当从方法或是property中返回值类型时，它们是被拷贝的。这并没有暴露引用给内部结构的风险。但是你在特性上付出了代价。值类型在常用的几乎不能给面向对象的技巧提供支持。你不能给值变量创建对象层级。你必须将所有的类变量都认为是sealed的。你可以创建继承接口的值类型，但是会面临装箱，而第17条则指出这是会造成性能降级的。将值类型以内存储存器的方式来考虑，而不是面向对象感觉中的对象。<br>相比值类型，你会创建更多引用类型。如果你对以下的问题的回答都是正确，那么你可以创建一个值类型。将以下问题都与Employee的例子作对比：  </p>
+<ol>
+<li>这个类的主要职责是否是数据储存？</li>
+<li>它public的接口是否被完全定义成property以拿到它的数据成员？</li>
+<li>我是否认定该类型永远不会有子类？</li>
+<li>我是否认定该类型永远不会被多态？</li>
+</ol>
+<p>用值类型来建立一个底层数据储存类。用引用类型来建立你的应用的行为。你会拥有在从类对象向外输出时的数据拷贝安全性。你的内存管理也会受益，因为这是基于栈的并且时内联的值储存。并且你也可以使用标准的面向对象技巧来创建你自己应用的逻辑。当对期待的使用方式产生疑问时，使用引用类型。</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Language-Idioms/" rel="tag"># Language Idioms</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2022/05/14/Prefer-member-initializers-to-assignment-statements/" rel="prev" title="优先考虑对成员初始化而不是仅仅声明语句">
+      <i class="fa fa-chevron-left"></i> 优先考虑对成员初始化而不是仅仅声明语句
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Oval_plus"
+      src="https://avatar.saraba1st.com/images/noavatar_small.gif">
+  <p class="site-author-name" itemprop="name">Oval_plus</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">34</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">11</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">36</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+
+
+  <div class="links-of-blogroll motion-element">
+    <div class="links-of-blogroll-title"><i class="link fa-fw"></i>
+      Links
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <a href="https://blog.sayuri.moe/" title="https:&#x2F;&#x2F;blog.sayuri.moe&#x2F;" rel="noopener" target="_blank">小百合的算术教室</a>
+        </li>
+    </ul>
+  </div>
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Oval_plus</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://mist.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Mist</a>
+  </div>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="user"></i>
+      </span>
+      <span class="site-uv" title="Total Visitors">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="eye"></i>
+      </span>
+      <span class="site-pv" title="Total Views">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>
